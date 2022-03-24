@@ -1,7 +1,8 @@
 import {Text, View} from "./Themed";
 import {useEffect, useState} from "react";
 import {User} from "firebase/auth";
-import {Button, Platform} from "react-native";
+import {Platform} from "react-native";
+import {Button} from "@ant-design/react-native";
 
 import {auth} from "../config/FirebaseConfig";
 
@@ -28,7 +29,7 @@ export default function LoginHeader(props: LoginHeaderProps) {
 
     return (
         <>
-            <View style={{backgroundColor: 'transparent'}}>
+            <View style={{backgroundColor: 'transparent', padding: 8}}>
                 {user && (
                     <>
                         <View style={{flexDirection: "row", backgroundColor: 'transparent'}}>
@@ -36,11 +37,11 @@ export default function LoginHeader(props: LoginHeaderProps) {
                                 <Text style={{backgroundColor: 'transparent'}}>Logged as {props.user?.email}</Text>
                             )}
 
-                            <View style={{paddingLeft: 12, paddingRight: 12, backgroundColor: 'transparent'}}>
+                            <View style={{backgroundColor: 'transparent'}}>
                                 <Button
-                                    title={'Logout'}
+                                    type={"warning"}
                                     onPress={logout}
-                                />
+                                >Logout</Button>
                             </View>
                         </View>
                     </>
@@ -49,11 +50,12 @@ export default function LoginHeader(props: LoginHeaderProps) {
                 {!user && (
                     <>
                         <Button
-                            title={'Login'}
+                            type={"primary"}
+                            style={{width: 100}}
                             onPress={() => {
                                 props.navigation.replace('Login')
                             }}
-                        />
+                        >Login</Button>
                     </>
                 )}
             </View>

@@ -9,15 +9,14 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
+import Home from '../screens/Home';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import {RootStackParamList, RootTabParamList, RootTabScreenProps} from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import LoginScreen from "../screens/LoginScreen";
 import {auth} from "../config/FirebaseConfig";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {User} from "firebase/auth";
-import LoginHeader from "../components/LoginHeader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Navigation({colorScheme}: { colorScheme: ColorSchemeName }) {
@@ -60,7 +59,7 @@ function BottomTabNavigator() {
     const [user, setUser] = useState<User | null>(null);
 
     const storeData = async (user: User | null) => {
-        if(user) {
+        if (user) {
             try {
                 await AsyncStorage.setItem(
                     'user',
@@ -77,25 +76,31 @@ function BottomTabNavigator() {
         }
     };
 
-    auth.onAuthStateChanged(authUser => {
-        storeData(authUser).then()
-    });
+    useEffect(() => {
+        auth.onAuthStateChanged(authUser => {
+            storeData(authUser).then()
+        });
+    }, [])
+
 
     return (
         <>
             <BottomTab.Navigator
-                initialRouteName="TabOne"
+                initialRouteName="Home"
                 screenOptions={{
+                    headerShown: false,
                     tabBarActiveTintColor: Colors[colorScheme].tint,
                 }}>
                 <BottomTab.Screen
-                    name="TabOne"
-                    component={TabOneScreen}
-                    options={({navigation}: RootTabScreenProps<'TabOne'>) => ({
-
-                        title: 'Feed',
+                    name="Home"
+                    component={Home}
+                    options={({navigation}: RootTabScreenProps<'Home'>) => ({
+                        title: 'Home',
                         tabBarIcon: ({color}) => <TabBarIcon name="home" color={color}/>,
-                        headerRight: () => (<LoginHeader user={user} navigation={navigation}/>)
+                        headerRight: () => (<></>),
+                                // FIXME: To be removed or only displayed on Desktop
+                                // <LoginHeader user={user} navigation={navigation}/>
+
                     })}
                 />
                 <BottomTab.Screen
