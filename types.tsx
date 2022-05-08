@@ -31,6 +31,7 @@ export type RootTabParamList = {
 export type HomeParamList = {
   Feed: undefined;
   Profiles: { userId: string };
+  Hashtag: { name: string };
   AddTweet: undefined;
 }
 

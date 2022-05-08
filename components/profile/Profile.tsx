@@ -5,7 +5,7 @@ import {Text, View} from "../Themed";
 import {ActivityIndicator, Card, Flex, WhiteSpace} from "@ant-design/react-native";
 import {BoldText, ItalicText} from "../StyledText";
 import ProfileTweets from "./ProfileTweets";
-import {Dimensions, ScrollView} from "react-native";
+import {Dimensions} from "react-native";
 
 export interface UserResponse {
     userId: string,
@@ -76,7 +76,7 @@ export default function Profile({navigation, route}: HomeStackScreenProps<'Profi
                             </Card.Body>
                         </Card>
 
-                        <ProfileTweets userId={user?.userId ?? ""}></ProfileTweets>
+                        <ProfileTweets userId={user?.userId ?? ""} navigation={navigation}></ProfileTweets>
                     </View>
                 </View>
             )}

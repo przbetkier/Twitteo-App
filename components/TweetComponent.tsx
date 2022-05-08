@@ -9,9 +9,10 @@ import React from "react";
 export interface TweetProps {
     tweet: Tweet;
     onProfileClicked: (userId: string) => void;
+    onHashtagClicked: (name: string) => void;
 }
 
-export const TweetComponent: React.FC<TweetProps> = ({tweet, onProfileClicked}) => {
+export const TweetComponent: React.FC<TweetProps> = ({tweet, onProfileClicked, onHashtagClicked}) => {
 
     return (
         <>
@@ -22,7 +23,7 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, onProfileClicked}) 
                         backgroundColor: useThemeColor({light: 'white', dark: '#181818'}, "background"),
                         borderColor: useThemeColor({light: 'black', dark: ''}, "background")
                     }
-            }
+                }
             >
                 <Card.Header
                     title={
@@ -45,9 +46,13 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, onProfileClicked}) 
                     content={<Flex justify={"start"}>
                         {tweet.hashtags.map(tag => {
                             return (
-                                <Tag key={`${tweet.id}-${tag}`} style={{marginRight: 8}} selected>
-                                    {tag}
-                                </Tag>
+                                <>
+                                    <Tag key={`${tweet.id}-${tag}`} style={{marginRight: 8}} selected
+                                         onLongPress={() => onHashtagClicked(tag)}
+                                    >
+                                        {tag}
+                                    </Tag>
+                                </>
                             )
                         })}
                     </Flex>}>

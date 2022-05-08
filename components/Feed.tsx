@@ -58,13 +58,22 @@ export default function Feed({navigation, route}: HomeStackScreenProps<'Feed'>) 
     }
 
     const renderTweet = (tweet: Tweet) => (
-        <TweetComponent key={tweet.id} tweet={tweet} onProfileClicked={
-            (userId => {
-                navigation.navigate('Profiles', {
-                    userId: userId
-                });
-            })
-        }/>
+        <TweetComponent key={`${tweet.id}`} tweet={tweet}
+                        onProfileClicked={
+                            (userId => {
+                                navigation.navigate('Profiles', {
+                                    userId: userId
+                                });
+                            })
+                        }
+                        onHashtagClicked={
+                            (hashtag => {
+                                navigation.navigate('Hashtag', {
+                                    name: hashtag
+                                });
+                            })
+                        }
+        />
     );
 
     const refresh = () => {

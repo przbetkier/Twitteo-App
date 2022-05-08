@@ -1,15 +1,16 @@
-import {View} from "../Themed";
 import React, {useEffect, useState} from "react";
 import {Tweet} from "../Feed";
 import {getUserPosts} from "../../networking/api";
-import {Dimensions, FlatList, RefreshControl} from "react-native";
+import {FlatList, RefreshControl} from "react-native";
 import {TweetComponent} from "../TweetComponent";
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 
 export interface ProfileTweetsProps {
     userId: string;
+    navigation: NativeStackNavigationProp<any, any>
 }
 
-export default function ProfileTweets({userId}: ProfileTweetsProps) {
+export default function ProfileTweets({userId, navigation}: ProfileTweetsProps) {
 
     const [tweets, setTweets] = useState<Tweet[]>([])
     const [loading, setLoading] = useState(true);
@@ -44,11 +45,20 @@ export default function ProfileTweets({userId}: ProfileTweetsProps) {
     }
 
     const renderTweet = (tweet: Tweet) => (
-        <TweetComponent key={tweet.id} tweet={tweet} onProfileClicked={
-            (() => {
-                // noop
-            })
-        }/>
+        <TweetComponent key={tweet.id} tweet={tweet}
+                        onProfileClicked={
+                            (() => {
+                                // noop
+                            })
+                        }
+                        onHashtagClicked={
+                            (hashtag => {
+                                navigation.navigate('Hashtag', {
+                                    name: hashtag
+                                });
+                            })
+                        }
+        />
     );
 
     const handleLoadMore = () => {

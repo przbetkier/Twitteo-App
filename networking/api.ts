@@ -32,6 +32,11 @@ export const getUserPosts = async (userId: string, page: number): Promise<Tweet[
     return await response.json() as Tweet[]
 }
 
+export const getHashtagPosts = async (name: string, page: number): Promise<Tweet[]> => {
+    const response = await fetch(`${API_URL}/tags/${name}/tweets?page=${page}&size=8`)
+    return await response.json() as Tweet[]
+}
+
 export const gerUserProfile = async (userId: string): Promise<UserResponse> => {
     const user = await getUser()
     const token = await user.stsTokenManager.accessToken

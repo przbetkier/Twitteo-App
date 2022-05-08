@@ -8,6 +8,7 @@ import Profile from "../components/profile/Profile";
 import {View, Text} from "../components/Themed";
 import AddTweet from "../components/AddTweet";
 import {auth} from '../config/FirebaseConfig';
+import Hashtag from "../components/hashtag/Hashtag";
 
 export default function Home() {
 
@@ -50,6 +51,13 @@ export default function Home() {
                             component={Profile}
                             options={{
                                 title: 'Profiles'
+                            }}
+                        />
+                        <Stack.Screen
+                            name="Hashtag"
+                            component={Hashtag}
+                            options={{
+                                title: 'Browse hashtag posts'
                             }}
                         />
                     </Stack.Group>

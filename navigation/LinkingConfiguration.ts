@@ -19,6 +19,7 @@ const linking: LinkingOptions<RootStackParamList> = {
             screens: {
               Feed: 'feed',
               Profiles: 'profiles',
+              Hashtag: 'hashtag',
               AddTweet: 'add-tweet'
             },
           },
