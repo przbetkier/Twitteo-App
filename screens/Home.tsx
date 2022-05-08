@@ -4,7 +4,7 @@ import Feed from "../components/Feed";
 import {getUser} from "../networking/api";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import * as React from "react";
-import Profile from "../components/Profile";
+import Profile from "../components/profile/Profile";
 import {View, Text} from "../components/Themed";
 import AddTweet from "../components/AddTweet";
 import {auth} from '../config/FirebaseConfig';

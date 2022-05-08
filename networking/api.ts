@@ -1,6 +1,6 @@
 import {Tweet, TweetPageResponse} from "../components/Feed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {UserResponse} from "../components/Profile";
+import {UserResponse} from "../components/profile/Profile";
 
 const API_URL = "http://167.99.129.28:8080"
 
@@ -25,6 +25,11 @@ export const getFeed = async (page: number): Promise<TweetPageResponse> => {
     const token = await user.stsTokenManager.accessToken
     const response = await fetch(`${API_URL}/tweets/feed?page=${page}&size=8`, headers(token))
     return await response.json() as TweetPageResponse
+}
+
+export const getUserPosts = async (userId: string, page: number): Promise<Tweet[]> => {
+    const response = await fetch(`${API_URL}/tweets/${userId}?page=${page}&size=8`)
+    return await response.json() as Tweet[]
 }
 
 export const gerUserProfile = async (userId: string): Promise<UserResponse> => {
