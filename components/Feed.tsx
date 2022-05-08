@@ -5,6 +5,8 @@ import {Button} from "@ant-design/react-native";
 import {getFeed} from "../networking/api";
 import {HomeStackScreenProps} from "../types";
 import {View} from "./Themed";
+import TabBarIcon from "@react-navigation/bottom-tabs/lib/typescript/src/views/TabBarIcon";
+import {FontAwesome} from "@expo/vector-icons";
 
 export interface Tweet {
     id: string;
@@ -98,10 +100,19 @@ export default function Feed({navigation, route}: HomeStackScreenProps<'Feed'>) 
                 }>
                     <Button
                         type={"primary"} style={{
-                        marginTop: 8,
-                        marginBottom: 8
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: 50,
+                        position: 'absolute',
+                        bottom: 10,
+                        right: 10,
+                        zIndex: 12000,
+                        height: 50,
+                        borderRadius: 100
                     }}
-                        onPress={() => navigation.navigate('AddTweet')}>Add new tweet!</Button>
+                        onPress={() => navigation.navigate('AddTweet')}>
+                        <FontAwesome size={24} name={"plus"}/>
+                    </Button>
                     <FlatList
                         refreshControl={<RefreshControl refreshing={loading} onRefresh={loadTweets}/>}
                         data={tweets}
