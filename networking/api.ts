@@ -1,8 +1,10 @@
 import {Tweet, TweetPageResponse} from "../components/Feed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {UserResponse} from "../components/profile/Profile";
+import {SearchResult} from "../screens/SearchScreen";
 
-const API_URL = "http://167.99.129.28:8080"
+// const API_URL = "http://167.99.129.28:8080"
+const API_URL = "http://localhost:8080"
 
 export const getUser = async (): Promise<any> => {
     const user = await AsyncStorage.getItem('user')
@@ -57,4 +59,9 @@ export const postTweet = async (content: string): Promise<Tweet> => {
         body: JSON.stringify({userId: 'FIXME', content: content}),
     })
     return response.json()
+}
+
+export const search = async (query: string): Promise<SearchResult> => {
+    const response = await fetch(`${API_URL}/search?query=${query}`)
+    return await response.json()
 }
