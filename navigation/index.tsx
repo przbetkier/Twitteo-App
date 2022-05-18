@@ -10,7 +10,7 @@ import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import Home from '../screens/Home';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import SearchScreen from '../screens/SearchScreen';
 import {RootStackParamList, RootTabParamList, RootTabScreenProps} from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import LoginScreen from "../screens/LoginScreen";
@@ -105,15 +105,16 @@ function BottomTabNavigator() {
                 />
                 <BottomTab.Screen
                     name="TabTwo"
-                    component={TabTwoScreen}
+                    component={SearchScreen}
                     options={{
+                        headerShown: true,
                         title: 'Search',
                         tabBarIcon: ({color}) => <TabBarIcon name="search" color={color}/>,
                     }}
                 />
                 <BottomTab.Screen
                     name="TabThree"
-                    component={TabTwoScreen}
+                    component={SearchScreen}
                     options={{
                         title: 'Notifications',
                         tabBarIcon: ({color}) => <TabBarIcon name="bell" color={color}/>,
@@ -121,7 +122,7 @@ function BottomTabNavigator() {
                 />
                 <BottomTab.Screen
                     name="TabFour"
-                    component={TabTwoScreen}
+                    component={SearchScreen}
                     options={{
                         title: 'Tab Four',
                         tabBarIcon: ({color}) => <TabBarIcon name="inbox" color={color}/>,

@@ -21,7 +21,7 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, onProfileClicked, o
                     {
                         padding: 8,
                         backgroundColor: useThemeColor({light: 'white', dark: '#181818'}, "background"),
-                        borderColor: useThemeColor({light: 'black', dark: ''}, "background")
+                        borderColor: useThemeColor({light: 'gray', dark: ''}, "background")
                     }
                 }
             >
@@ -29,12 +29,12 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, onProfileClicked, o
                     title={
                         <Flex justify={"between"}>
                             <TouchableOpacity onPress={() => onProfileClicked(tweet.userId)}>
-                                <Text style={{color: `${tintColorLight}`}}>{tweet.userName}</Text>
+                                <Text style={{color: `${tintColorLight}`}}>{'@' + tweet.userName}</Text>
                             </TouchableOpacity>
                             <Text>{formatDate(tweet.createdAt)}</Text>
                         </Flex>
                     }
-                    thumbStyle={{width: 30, height: 30}}
+                    thumbStyle={{width: 35, height: 35, borderRadius: 17}}
                     thumb={`https://i.pravatar.cc/150?u=${tweet.userId}`}
                 />
                 <Card.Body>
@@ -47,8 +47,10 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, onProfileClicked, o
                         {tweet.hashtags.map(tag => {
                             return (
                                 <>
-                                    <Tag key={`${tweet.id}-${tag}`} style={{marginRight: 8}} selected
+                                    <Tag key={`${tweet.id}-${tag}`}
+                                         style={{marginRight: 8}}
                                          onLongPress={() => onHashtagClicked(tag)}
+                                         selected
                                     >
                                         {tag}
                                     </Tag>
