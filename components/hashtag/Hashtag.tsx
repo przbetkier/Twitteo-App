@@ -43,20 +43,7 @@ export default function Hashtag({navigation, route}: HomeStackScreenProps<'Hasht
     }
 
     const renderTweet = (tweet: Tweet) => (
-        <TweetComponent key={`${tweet.id + Date.now()}`} tweet={tweet}
-                        onProfileClicked={
-                            (userId => {
-                                navigation.navigate('Profiles', {
-                                    userId: userId
-                                });
-                            })
-                        }
-                        onHashtagClicked={
-                            (() => {
-                                // noop
-                            })
-                        }
-        />
+        <TweetComponent key={`${tweet.id + Date.now()}`} tweet={tweet}/>
     );
 
     const handleLoadMore = () => {

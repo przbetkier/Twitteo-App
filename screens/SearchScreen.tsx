@@ -1,15 +1,16 @@
-import {Dimensions, ScrollView, StyleSheet, TextInput} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 
 import {Text, View} from '../components/Themed';
 import React, {useState} from "react";
 import useColorScheme from "../hooks/useColorScheme";
 import Colors from "../constants/Colors";
-import {ActivityIndicator, Card, Flex, WhiteSpace} from "@ant-design/react-native";
+import {ActivityIndicator, Card, Flex} from "@ant-design/react-native";
 import {search} from "../networking/api";
 import {TweetComponent} from "../components/TweetComponent";
 import {BoldText} from "../components/StyledText";
 import {UserResponse} from "../components/profile/Profile";
 import {Tweet} from "../components/Feed";
+import {useNavigation} from "@react-navigation/native";
 
 export interface SearchResult {
     users: UserResponse[],
@@ -17,6 +18,7 @@ export interface SearchResult {
 }
 
 export default function SearchScreen() {
+    const navigation = useNavigation();
 
     const [loading, setLoading] = useState(false)
     const [searchResult, setSearchResult] = useState<SearchResult>()
@@ -28,7 +30,6 @@ export default function SearchScreen() {
     const handleInputChanged = (text: string) => {
         if (text.length >= 3) {
             refreshResults(text)
-
         }
     }
 
@@ -39,6 +40,18 @@ export default function SearchScreen() {
                 setLoading(false)
             }
         )
+    }
+
+    const handleProfileClicked = (displayName: string) => {
+        navigation.navigate('Root', {
+            screen: "Home",
+            params: {
+                screen: "Profiles",
+                params: {
+                    displayName: displayName
+                }
+            }
+        });
     }
 
     return (
@@ -63,7 +76,6 @@ export default function SearchScreen() {
                     onChangeText={(text) => handleInputChanged(text)}
                     placeholder={"What are you looking for?"}
                 >
-
                 </TextInput>
 
 
@@ -79,38 +91,43 @@ export default function SearchScreen() {
                                     <Text style={styles.title}>Users</Text>
                                     {
                                         searchResult.users.map(user =>
-                                            <Card
+                                            <TouchableOpacity
+                                                onPress={() => handleProfileClicked(user?.displayName ?? "")}
                                                 key={`${user.userId}`}
-                                                style={
-                                                    {
-                                                        padding: 8,
-                                                        marginBottom: 8,
-                                                        backgroundColor: Colors[colorScheme].background,
-                                                        borderColor: Colors[colorScheme].text
-                                                    }
-                                                }
                                             >
-                                                <Card.Header
-                                                    title={
-                                                    <>
-                                                    <Text
-                                                        style={{
-                                                            fontSize: 16,
-                                                            marginLeft: 18
-                                                        }}>{user?.displayName}
-                                                    </Text>
-                                                            <Flex style={{marginLeft: 18}}>
-                                                                <BoldText style={{paddingRight: 4}}>{user?.followers}</BoldText>
-                                                                <Text>followers</Text>
-                                                            </Flex>
-                                                    </>
+                                                <Card
+                                                    style={
+                                                        {
+                                                            padding: 8,
+                                                            marginBottom: 8,
+                                                            backgroundColor: Colors[colorScheme].background,
+                                                            borderColor: Colors[colorScheme].text
+                                                        }
+                                                    }
+                                                >
+                                                    <Card.Header
+                                                        title={
+                                                            <>
+                                                                <Text
+                                                                    style={{
+                                                                        fontSize: 16,
+                                                                        marginLeft: 18
+                                                                    }}>{user?.displayName}
+                                                                </Text>
+                                                                <Flex style={{marginLeft: 18}}>
+                                                                    <BoldText
+                                                                        style={{paddingRight: 4}}>{user?.followers}</BoldText>
+                                                                    <Text>followers</Text>
+                                                                </Flex>
+                                                            </>
 
-                                                }
-                                                    thumbStyle={{width: 40, height: 40, borderRadius: 50}}
-                                                    thumb={`https://i.pravatar.cc/150?u=${user.userId}`}>
-                                                </Card.Header>
+                                                        }
+                                                        thumbStyle={{width: 40, height: 40, borderRadius: 50}}
+                                                        thumb={`https://i.pravatar.cc/150?u=${user.userId}`}>
+                                                    </Card.Header>
 
-                                            </Card>
+                                                </Card>
+                                            </TouchableOpacity>
                                         )
                                     }
                                 </View>
@@ -124,12 +141,7 @@ export default function SearchScreen() {
                             <Text style={styles.title}>Tweets</Text>
                             {
                                 searchResult.tweets.map(tweet =>
-                                    <TweetComponent key={`${tweet.id}`} tweet={tweet}
-                                                    onProfileClicked={() => {
-                                                    }}
-                                                    onHashtagClicked={() => {
-                                                    }}
-                                    />
+                                    <TweetComponent key={`${tweet.id}`} tweet={tweet}/>
                                 )
                             }
                         </View>

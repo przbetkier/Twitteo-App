@@ -24,6 +24,7 @@ const headers = (token: string) => {
 
 export const getFeed = async (page: number): Promise<TweetPageResponse> => {
     const user = await getUser()
+    console.log("Getting feed for page " + page);
     const token = await user.stsTokenManager.accessToken
     const response = await fetch(`${API_URL}/tweets/feed?page=${page}&size=8`, headers(token))
     return await response.json() as TweetPageResponse
@@ -43,6 +44,13 @@ export const gerUserProfile = async (userId: string): Promise<UserResponse> => {
     const user = await getUser()
     const token = await user.stsTokenManager.accessToken
     const response = await fetch(`${API_URL}/users/${userId}`, headers(token))
+    return await response.json() as UserResponse
+}
+
+export const gerUserProfileByDisplayName = async (displayName: string): Promise<UserResponse> => {
+    const user = await getUser()
+    const token = await user.stsTokenManager.accessToken
+    const response = await fetch(`${API_URL}/users/?displayName=${displayName}`, headers(token))
     return await response.json() as UserResponse
 }
 

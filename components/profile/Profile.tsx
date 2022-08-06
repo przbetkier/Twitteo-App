@@ -1,6 +1,6 @@
 import {HomeStackScreenProps} from "../../types";
 import React, {useEffect, useState} from "react";
-import {gerUserProfile} from "../../networking/api";
+import {gerUserProfileByDisplayName} from "../../networking/api";
 import {Text, useThemeColor, View} from "../Themed";
 import {ActivityIndicator, Card, Flex, WhiteSpace} from "@ant-design/react-native";
 import {BoldText, ItalicText} from "../StyledText";
@@ -17,7 +17,7 @@ export interface UserResponse {
 
 export default function Profile({navigation, route}: HomeStackScreenProps<'Profiles'>) {
 
-    const {userId} = route.params;
+    const {displayName} = route.params;
     const bgColor = useThemeColor({light: 'white', dark: '#181818'}, "background")
     const borderColor = useThemeColor({light: 'black', dark: ''}, "background")
     const [loading, setLoading] = useState(false)
@@ -26,17 +26,17 @@ export default function Profile({navigation, route}: HomeStackScreenProps<'Profi
 
     const loadProfile = React.useCallback(() => {
         setLoading(true);
-        gerUserProfile(userId)
+        gerUserProfileByDisplayName(displayName)
             .then(data => {
                 const response = data as UserResponse;
                 setUser(response)
             })
             .finally(() => setLoading(false));
-    }, []);
+    }, [displayName]);
 
     useEffect(() => {
         loadProfile()
-    }, [userId])
+    }, [displayName])
 
     return (
         <>
@@ -46,7 +46,6 @@ export default function Profile({navigation, route}: HomeStackScreenProps<'Profi
                         {
                             flex: 1,
                             alignItems: "stretch",
-                            justifyContent: "center",
                             paddingTop: 12,
                             paddingBottom: 12,
                             paddingLeft: Dimensions.get('window').width > 800 ? "25%" : 8,
@@ -66,7 +65,7 @@ export default function Profile({navigation, route}: HomeStackScreenProps<'Profi
                             <Card.Header
                                 title={<Text style={{fontSize: 20, marginLeft: 18}}>{user?.displayName}</Text>}
                                 thumbStyle={{width: 60, height: 60, borderRadius: 50}}
-                                thumb={`https://i.pravatar.cc/150?u=${userId}`}>
+                                thumb={`https://i.pravatar.cc/150?u=${user?.userId}`}>
 
                             </Card.Header>
                             <Card.Body style={{padding: 10}}>

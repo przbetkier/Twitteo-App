@@ -58,6 +58,9 @@ export default function LoginScreen({navigation}: RootStackScreenProps<'Login'>)
                     <Text>
                         Your email is {user.email}
                     </Text>
+                    <Text>
+                        Your bio is {String(user.emailVerified)}
+                    </Text>
                     <Button
                         type={"warning"}
                         onPress={logout}
