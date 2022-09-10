@@ -6,13 +6,15 @@ import {TweetComponent} from "../TweetComponent";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {Text} from "../Themed";
 import {ActivityIndicator} from "@ant-design/react-native";
+import {UserResponse} from "./Profile";
+import {Bio} from "./Bio";
 
 export interface ProfileTweetsProps {
-    userId: string;
+    user: UserResponse,
     navigation: NativeStackNavigationProp<any, any>
 }
 
-export default function ProfileTweets({userId, navigation}: ProfileTweetsProps) {
+export default function ProfileTweets({user, navigation}: ProfileTweetsProps) {
 
     const [tweets, setTweets] = useState<Tweet[]>([])
     const [loading, setLoading] = useState(true);
@@ -25,7 +27,7 @@ export default function ProfileTweets({userId, navigation}: ProfileTweetsProps) 
 
     useEffect(() => {
         getTweets(page, true).then();
-    }, [userId])
+    }, [user])
 
     useEffect(() => {
     }, [tweets]);
@@ -36,15 +38,20 @@ export default function ProfileTweets({userId, navigation}: ProfileTweetsProps) 
     }, []);
 
     const getTweets = async (page: number, refresh: boolean = false) => {
-        const posts = await getUserPosts(userId, page)
+        const posts = await getUserPosts(user.userId, page)
         const responseTweets = posts as Tweet[];
         refresh ? setTweets(responseTweets) : setTweets([...tweets, ...responseTweets])
         setPage(page + 1)
         setLoading(false)
     }
 
+    const handleTweetDeleted = (tweet: Tweet) => {
+        const tweetsFiltered = tweets.filter(t => t.id !== tweet.id)
+        setTweets(tweetsFiltered)
+    }
+
     const renderTweet = (tweet: Tweet) => (
-        <TweetComponent key={tweet.id} tweet={tweet}/>
+        <TweetComponent key={tweet.id} tweet={tweet} onTweetDeleted={handleTweetDeleted}/>
     );
 
     const handleLoadMore = () => {
@@ -57,27 +64,33 @@ export default function ProfileTweets({userId, navigation}: ProfileTweetsProps) 
 
     return (
         <>
-            {loading && (<ActivityIndicator color={"gray"} size={"large"} /> )}
+            {loading && (<ActivityIndicator color={"gray"} size={"large"}/>)}
             {!loading && (
                 <>
-                {hasTweets() ? (
-                    <FlatList
-                        nestedScrollEnabled={false}
-                        refreshControl={<RefreshControl refreshing={loading} onRefresh={loadTweets}/>}
-                        data={tweets}
-                        refreshing={loading}
-                        onRefresh={refresh}
-                        renderItem={({item}) => renderTweet(item)}
-                        keyExtractor={(item, index) => item.id+'key'+index}
-                        onEndReached={handleLoadMore}
-                        onEndReachedThreshold={0.8}
-                    >
-                    </FlatList>
-                ) : (
-                    <>
-                        <Text style={{textAlign: "center"}}>User has no tweets yet.</Text>
-                    </>
-                )}
+                    {hasTweets() ? (
+                        <FlatList
+                            ListHeaderComponent={
+                                <>
+                                    <Bio user={user}/>
+                                </>
+                            }
+                            stickyHeaderIndices={[0]}
+                            nestedScrollEnabled={false}
+                            refreshControl={<RefreshControl refreshing={loading} onRefresh={loadTweets}/>}
+                            data={tweets}
+                            refreshing={loading}
+                            onRefresh={refresh}
+                            renderItem={({item}) => renderTweet(item)}
+                            keyExtractor={(item, index) => item.id + 'key' + index}
+                            onEndReached={handleLoadMore}
+                            onEndReachedThreshold={0.8}
+                        >
+                        </FlatList>
+                    ) : (
+                        <>
+                            <Text style={{textAlign: "center"}}>User has no tweets yet.</Text>
+                        </>
+                    )}
 
                 </>
             )}

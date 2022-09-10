@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {Dimensions, FlatList} from "react-native";
+import {FlatList} from "react-native";
 import {Button} from "@ant-design/react-native";
 import {getFeed} from "../networking/api";
 import {HomeStackScreenProps} from "../types";
-import {Text, View} from "./Themed";
+import {View} from "./Themed";
 import {FontAwesome} from "@expo/vector-icons";
 import {TweetComponent} from "./TweetComponent";
 
@@ -38,7 +38,6 @@ export default function Feed({navigation}: HomeStackScreenProps<'Feed'>) {
     }
 
     useEffect(() => {
-        console.log("In use effect...")
         getTweets(page).then();
         navigation.addListener('focus', () => refresh())
         return () => {
@@ -55,8 +54,13 @@ export default function Feed({navigation}: HomeStackScreenProps<'Feed'>) {
         getTweets(page).then()
     }
 
+    const handleTweetDeleted = (tweet: Tweet) => {
+        const tweetsFiltered = tweets.filter(t => t.id !== tweet.id)
+        setTweets(tweetsFiltered)
+    }
+
     const renderTweet = (tweet: Tweet) => (
-        <TweetComponent key={`tweet-${tweet.id}`} tweet={tweet}/>
+        <TweetComponent key={`tweet-${tweet.id}`} tweet={tweet} onTweetDeleted={handleTweetDeleted}/>
     );
 
     function refresh() {
@@ -65,16 +69,15 @@ export default function Feed({navigation}: HomeStackScreenProps<'Feed'>) {
 
     return (
         <>
-            <View style={{flex: 1, justifyContent: "center"}}>
+            <View style={{flex: 1, alignItems: "center"}}>
                 <View style={
                     {
                         flex: 1,
-                        alignItems: "stretch",
+                        alignItems: "center",
                         justifyContent: "center",
                         paddingTop: 12,
                         paddingBottom: 12,
-                        paddingLeft: Dimensions.get('window').width > 800 ? "25%" : 8,
-                        paddingRight: Dimensions.get('window').width > 800 ? "25%" : 8
+                        maxWidth: 1200,
                     }
                 }>
                     <Button

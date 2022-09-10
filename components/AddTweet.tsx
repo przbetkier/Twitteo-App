@@ -16,7 +16,6 @@ export default function AddTweet({navigation, route}: HomeStackScreenProps<'AddT
         postTweet(tweetContent)
             .then(() => navigation.navigate('Feed'))
             .then(() => setIsPosting(false))
-
     }
 
     const styles = StyleSheet.create({

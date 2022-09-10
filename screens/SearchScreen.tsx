@@ -141,7 +141,7 @@ export default function SearchScreen() {
                             <Text style={styles.title}>Tweets</Text>
                             {
                                 searchResult.tweets.map(tweet =>
-                                    <TweetComponent key={`${tweet.id}`} tweet={tweet}/>
+                                    <TweetComponent key={`${tweet.id}`} tweet={tweet} deletionDisabled={true} onTweetDeleted={()=>{}}/>
                                 )
                             }
                         </View>

@@ -42,8 +42,13 @@ export default function Hashtag({navigation, route}: HomeStackScreenProps<'Hasht
             .finally(() => setLoading(false));
     }
 
+    const handleTweetDeleted = (tweet: Tweet) => {
+        const tweetsFiltered = tweets.filter(t => t.id !== tweet.id)
+        setTweets(tweetsFiltered)
+    }
+
     const renderTweet = (tweet: Tweet) => (
-        <TweetComponent key={`${tweet.id + Date.now()}`} tweet={tweet}/>
+        <TweetComponent key={`${tweet.id + Date.now()}`} tweet={tweet} onTweetDeleted={handleTweetDeleted}/>
     );
 
     const handleLoadMore = () => {
@@ -51,8 +56,18 @@ export default function Hashtag({navigation, route}: HomeStackScreenProps<'Hasht
     }
 
     return (
-        <>
-            <View style={{flex: 1, justifyContent: "center"}}>
+        <View style={{flex: 1, alignItems: "center"}}>
+            <View style={
+                {
+                    width: '100%',
+                    maxWidth: 1200,
+                    justifyContent: "center",
+                    paddingTop: 12,
+                    paddingBottom: 12,
+                }
+            }>
+
+
                 {!loading && (
                     <FlatList
                         nestedScrollEnabled={false}
@@ -68,6 +83,6 @@ export default function Hashtag({navigation, route}: HomeStackScreenProps<'Hasht
                     </FlatList>
                 )}
             </View>
-        </>
+        </View>
     )
 }
