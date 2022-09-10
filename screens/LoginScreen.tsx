@@ -1,5 +1,5 @@
 import {StyleSheet, TextInput} from "react-native";
-import {ActivityIndicator, Button} from "@ant-design/react-native"
+import {ActivityIndicator, Button, Toast} from "@ant-design/react-native"
 import {Text, View} from "../components/Themed";
 import React, {useEffect, useState} from "react";
 import {signInWithEmailAndPassword, User} from "firebase/auth";
@@ -57,6 +57,9 @@ export default function LoginScreen({navigation}: RootStackScreenProps<'Login'>)
                     </Text>
                     <Text>
                         Your email is {user.email}
+                    </Text>
+                    <Text>
+                        Your bio is {String(user.emailVerified)}
                     </Text>
                     <Button
                         type={"warning"}
