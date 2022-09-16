@@ -6,6 +6,7 @@ import {HomeStackScreenProps} from "../types";
 import {View} from "./Themed";
 import {FontAwesome} from "@expo/vector-icons";
 import {TweetComponent} from "./TweetComponent";
+import {getWidth} from "../utils/screen";
 
 export interface Tweet {
     id: string;
@@ -15,6 +16,7 @@ export interface Tweet {
     userId: string;
     userName: string;
     replies: number;
+    attachments: number[];
 }
 
 export interface TweetPageResponse {
@@ -96,6 +98,7 @@ export default function Feed({navigation}: HomeStackScreenProps<'Feed'>) {
                         <FontAwesome size={24} name={"plus"}/>
                     </Button>
                     <FlatList
+                        style={{minWidth: getWidth()}}
                         data={tweets}
                         refreshing={loading}
                         onRefresh={refresh}

@@ -4,10 +4,11 @@ import {getUserPosts} from "../../networking/api";
 import {FlatList, RefreshControl} from "react-native";
 import {TweetComponent} from "../TweetComponent";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
-import {Text} from "../Themed";
+import {Text, View} from "../Themed";
 import {ActivityIndicator} from "@ant-design/react-native";
 import {UserResponse} from "./Profile";
 import {Bio} from "./Bio";
+import {getWidth} from "../../utils/screen";
 
 export interface ProfileTweetsProps {
     user: UserResponse,
@@ -58,41 +59,31 @@ export default function ProfileTweets({user, navigation}: ProfileTweetsProps) {
         getTweets(page).then();
     }
 
-    const hasTweets = (): boolean => {
-        return tweets.length > 0;
-    }
 
     return (
         <>
             {loading && (<ActivityIndicator color={"gray"} size={"large"}/>)}
             {!loading && (
-                <>
-                    {hasTweets() ? (
-                        <FlatList
-                            ListHeaderComponent={
-                                <>
-                                    <Bio user={user}/>
-                                </>
-                            }
-                            stickyHeaderIndices={[0]}
-                            nestedScrollEnabled={false}
-                            refreshControl={<RefreshControl refreshing={loading} onRefresh={loadTweets}/>}
-                            data={tweets}
-                            refreshing={loading}
-                            onRefresh={refresh}
-                            renderItem={({item}) => renderTweet(item)}
-                            keyExtractor={(item, index) => item.id + 'key' + index}
-                            onEndReached={handleLoadMore}
-                            onEndReachedThreshold={0.8}
-                        >
-                        </FlatList>
-                    ) : (
-                        <>
-                            <Text style={{textAlign: "center"}}>User has no tweets yet.</Text>
-                        </>
-                    )}
-
-                </>
+                <FlatList
+                    style={{minWidth: getWidth()}}
+                    ListHeaderComponent={
+                        <Bio user={user}/>
+                    }
+                    ListEmptyComponent={
+                        <Text style={{textAlign: "center"}}>This user has no tweets right now.</Text>
+                    }
+                    stickyHeaderIndices={[0]}
+                    nestedScrollEnabled={false}
+                    refreshControl={<RefreshControl refreshing={loading} onRefresh={loadTweets}/>}
+                    data={tweets}
+                    refreshing={loading}
+                    onRefresh={refresh}
+                    renderItem={({item}) => renderTweet(item)}
+                    keyExtractor={(item, index) => item.id + 'key' + index}
+                    onEndReached={handleLoadMore}
+                    onEndReachedThreshold={0.8}
+                >
+                </FlatList>
             )}
         </>
     )
