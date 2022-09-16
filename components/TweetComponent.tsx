@@ -3,12 +3,18 @@ import {Text, useThemeColor} from "./Themed"
 import {Card, Flex, SwipeAction, Toast, WhiteSpace} from "@ant-design/react-native";
 import {formatDate} from "../utils/date-util";
 import {tintColorLight} from "../constants/Colors";
-import {Animated, Linking, StyleSheet, TouchableOpacity, View} from "react-native";
+import {
+    Animated, Image,
+    Linking,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import React, {useEffect, useState} from "react";
 import ParsedText from "react-native-parsed-text";
 import {useNavigation} from '@react-navigation/native';
 import {FontAwesome} from "@expo/vector-icons";
-import {deleteTweet, getUser} from "../networking/api";
+import {API_URL, deleteTweet, getUser} from "../networking/api";
 
 export interface TweetProps {
     tweet: Tweet;
@@ -20,9 +26,15 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
 
     const [currentUserId, setCurrentUserId] = useState();
 
+    const [imageModalVisible, setImageModalVisible] = useState(false);
+
+    const showImagesModal = () => {
+        setImageModalVisible(true);
+    };
+
     useEffect(() => {
         getUser().then((user) => {
-           setCurrentUserId(user.uid);
+            setCurrentUserId(user.uid);
         });
     }, []);
 
@@ -70,14 +82,14 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
     const handleTweetDeleted = () => {
         deleteTweet(tweet.id)
             .then(() => {
-                onTweetDeleted(tweet);
+                    onTweetDeleted(tweet);
 
-                Toast.success({
-                    duration: 2,
-                    content: "Tweet successfully deleted!",
-                });
-            }
-        )
+                    Toast.success({
+                        duration: 0.5,
+                        content: "Tweet successfully deleted!",
+                    });
+                }
+            )
             .catch((e) => {
                 console.log(`Error occurred: ${e}`)
             })
@@ -149,6 +161,23 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
                         >
                             {tweet.content}
                         </ParsedText>
+                        <View style={{marginTop: 8}}>
+                            {tweet.attachments.map(image => (
+
+                                <Image
+                                    key={`image-${image}`}
+                                    style={{
+                                        alignSelf: 'center',
+                                        height: 200,
+                                        width: '100%'
+                                    }}
+                                    source={{uri: `${API_URL}/attachments/${image}`}}
+
+                                    resizeMode={"contain"}
+                                >
+                                </Image>
+                            ))}
+                        </View>
                     </Card.Body>
                 </Card>
             </SwipeAction>
@@ -168,5 +197,49 @@ const styles = StyleSheet.create({
 
     hashTag: {
         color: tintColorLight,
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+    },
+    buttonOpen: {
+        backgroundColor: "#F194FF",
+    },
+    buttonClose: {
+        backgroundColor: "#2196F3",
+        position: "absolute",
+        right: 10,
+        top: 10
+    },
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center",
+        color: "red"
     }
 });
