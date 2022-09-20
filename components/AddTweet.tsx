@@ -76,8 +76,8 @@ export default function AddTweet({navigation, route}: HomeStackScreenProps<'AddT
         input: {
             height: Dimensions.get('window').height / 4,
             backgroundColor: useThemeColor({light: 'white', dark: '#181818'}, "background"),
-            borderBottomColor: 'white',
-            borderBottomWidth: 1,
+            borderBottomColor: useThemeColor({light: 'lightgray', dark: 'white'}, "background"),
+            borderBottomWidth: 0.5,
             padding: 10,
             color: useThemeColor({light: 'black', dark: 'white'}, "text"),
         },
@@ -109,9 +109,9 @@ export default function AddTweet({navigation, route}: HomeStackScreenProps<'AddT
                 <Card
                     style={
                         {
+                            borderWidth: 0,
                             padding: 8,
                             backgroundColor: useThemeColor({light: 'white', dark: '#181818'}, "background"),
-                            borderColor: useThemeColor({light: 'gray', dark: 'black'}, "background"),
                         }
                     }
                 >
@@ -123,18 +123,20 @@ export default function AddTweet({navigation, route}: HomeStackScreenProps<'AddT
 
                         <TextInput
                             style={styles.input}
+                            autoFocus={true}
                             value={tweetContent}
                             onChangeText={(text) => {
                                 setTweetContent(text)
                             }}
                             multiline={true}
                             placeholder="What's on your mind?"
+                            autoCorrect={false}
                             placeholderTextColor={useThemeColor({light: 'gray', dark: 'gray'}, "background")}
                             keyboardType="twitter"
                         />
                         <FontAwesome
                             name={"photo"}
-                            color={"white"}
+                            color={tintColorLight}
                             size={24}
                             style={{marginTop: 8}}
                             onPress={pickImage}

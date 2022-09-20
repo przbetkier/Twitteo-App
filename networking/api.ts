@@ -84,7 +84,6 @@ export const deleteTweet = async (tweetId: string): Promise<any> => {
 }
 
 
-
 export const uploadImage = async (imageUri: string): Promise<ObjectUploadResponse> => {
     const URL_ATTACHMENT_UPLOAD_URL = `${API_URL}/attachments`
     const user = await getUser()
@@ -123,7 +122,118 @@ export const search = async (query: string): Promise<SearchResult> => {
     return await response.json()
 }
 
+export const getFollowers = async (userId: string, page: number) => {
+    const response = await fetch(`${API_URL}/users/${userId}/followers?page=${page}&size=10`)
+    return await response.json() as FollowersResponse
+}
+
+export const getFollowees = async (userId: string, page: number) => {
+    const response = await fetch(`${API_URL}/users/${userId}/followees?page=${page}&size=10`)
+    return await response.json() as FolloweesResponse
+}
+
+export const getFollowerState = async (userId: string) => {
+    const user = await getUser()
+    const token = await user.stsTokenManager.accessToken
+
+    const response = await fetch(`${API_URL}/users/${userId}/follower-state`, headers(token))
+    return await response.json() as FollowerState
+}
+
+export const follow = async (userId: string) => {
+    const user = await getUser()
+    const token = await user.stsTokenManager.accessToken
+
+    const response = await fetch(`${API_URL}/users/${userId}/followers`, {
+        headers: {
+            ...headers(token).headers,
+        },
+        method: 'POST'
+    })
+    return await response.json() as FollowerState
+}
+
+export const unfollow = async (userId: string) => {
+    const user = await getUser()
+    const token = await user.stsTokenManager.accessToken
+
+    const response = await fetch(`${API_URL}/users/${userId}/followers`, {
+        headers: {
+            ...headers(token).headers,
+        },
+        method: 'DELETE'
+    })
+    return await response.json() as FollowerState
+}
+
+export const getTweetLikeState = async (tweetId: string) => {
+    const user = await getUser()
+    const token = await user.stsTokenManager.accessToken
+
+    const response = await fetch(`${API_URL}/tweets/${tweetId}/like-state`, {
+        headers: {
+            ...headers(token).headers,
+        }
+    })
+    return await response.json() as TweetLikeStateResponse
+}
+
+export const likeTweet = async (tweetId: string, like: boolean) => {
+    const user = await getUser()
+    const token = await user.stsTokenManager.accessToken
+
+    const response = await fetch(`${API_URL}/tweets/${tweetId}/${like ? "like": "unlike"}`, {
+        headers: {
+            ...headers(token).headers,
+        },
+        method: "POST"
+    })
+    return await response.json() as TweetLikeStateResponse
+}
+
+export const signUp = async (token: string, displayName: string) => {
+    return await fetch(`${API_URL}/users`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({displayName: displayName})
+    });
+}
+
+export enum TweetLikeState {
+    CAN_LIKE = "CAN_LIKE",
+    CAN_UNLIKE = "CAN_UNLIKE"
+}
+
+export interface TweetLikeStateResponse {
+    state: TweetLikeState;
+    likes: number;
+}
+
+export interface BasicUserResponse {
+    userId: string;
+    displayName: string;
+}
+
 export interface ObjectUploadResponse {
     id: number,
     name: string
+}
+
+
+export interface FollowersResponse {
+    followers: BasicUserResponse[]
+}
+
+export interface FolloweesResponse {
+    followees: BasicUserResponse[]
+}
+
+export enum FollowerState {
+    FOLLOWS = "FOLLOWS",
+    DOES_NOT_FOLLOW = "DOES_NOT_FOLLOW",
+    CANNOT_FOLLOW = "CANNOT_FOLLOW"
+
 }

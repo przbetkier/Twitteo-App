@@ -1,21 +1,54 @@
 import {StyleSheet, TextInput} from "react-native";
 import {ActivityIndicator, Button, Toast} from "@ant-design/react-native"
-import {Text, View} from "../components/Themed";
+import {Text, useThemeColor, View} from "../components/Themed";
 import React, {useEffect, useState} from "react";
 import {signInWithEmailAndPassword, User} from "firebase/auth";
 import {auth} from "../config/FirebaseConfig";
 import {RootStackScreenProps} from "../types";
 import {getUser} from "../networking/api";
+import {tintColorLight} from "../constants/Colors";
+import {FontAwesome} from "@expo/vector-icons";
 
 export default function LoginScreen({navigation}: RootStackScreenProps<'Login'>) {
 
     const [user, setUser] = useState<User | null>()
+
+    const inputBgColor = useThemeColor({light: 'white', dark: '#181818'}, "background");
+    const inputColor = useThemeColor({light: 'black', dark: 'white'}, "text");
+    const inputBorder = useThemeColor({light: 'gray', dark: 'gray'}, "text");
+
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        title: {
+            fontSize: 20,
+            marginBottom: 100,
+            fontWeight: 'bold',
+        },
+        input: {
+            width: 300,
+            backgroundColor: inputBgColor,
+            padding: 10,
+            marginTop: 8,
+            color: inputColor,
+            borderWidth: 0.5,
+            borderColor: inputBorder
+        },
+    });
 
     const loadUser = () => {
         getUser().then(setUser).then(() => {
             setLoading(false)
         })
     }
+
+
+    auth.onAuthStateChanged((user) => {
+        setUser(user);
+    })
 
     const [loading, setLoading] = useState(true);
     const [email, setEmail] = useState("");
@@ -79,15 +112,27 @@ export default function LoginScreen({navigation}: RootStackScreenProps<'Login'>)
                         <TextInput value={password}
                                    onChangeText={setPassword}
                                    style={styles.input}
-                                   placeholder={"Password"}
+                                   placeholder={"password"}
                                    secureTextEntry={true}
                         />
 
-                        <Button
-                            type={"primary"}
-                            onPress={handleSignIn}
-                            loading={submitting}
-                        >Login</Button>
+                        <>
+                            <Button
+                                type={"primary"}
+                                style={{width: 300, marginTop: 12}}
+                                onPress={handleSignIn}
+                                loading={submitting}
+                            ><FontAwesome
+                                name={"rocket"}
+                                color={"white"}
+                                size={20}
+                            ></FontAwesome> Login
+                            </Button>
+                            <Text style={{color: tintColorLight, marginTop: 16}}
+                                  onPress={() => navigation.navigate('Registration')}>
+                                Don't have an account?
+                            </Text>
+                        </>
                     </>
                 )}
             </>)}
@@ -96,23 +141,4 @@ export default function LoginScreen({navigation}: RootStackScreenProps<'Login'>)
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    input: {
-        width: 300,
-        backgroundColor: 'white',
-        height: 40,
-        color: 'black',
-        margin: 12,
-        borderWidth: 1,
-        padding: 5,
-    },
-});
+

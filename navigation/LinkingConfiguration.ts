@@ -20,7 +20,9 @@ const linking: LinkingOptions<RootStackParamList> = {
               Feed: 'feed',
               Profiles: 'profiles',
               Hashtag: 'hashtag',
-              AddTweet: 'add-tweet'
+              AddTweet: 'add-tweet',
+              Followers: 'followers',
+              Followees: 'followees'
             },
           },
           TabTwo: {
@@ -47,6 +49,7 @@ const linking: LinkingOptions<RootStackParamList> = {
       },
       Modal: 'modal',
       Login: 'login',
+      Registration: 'registration',
       NotFound: '*',
     },
   },
