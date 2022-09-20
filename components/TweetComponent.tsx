@@ -15,6 +15,7 @@ import ParsedText from "react-native-parsed-text";
 import {useNavigation} from '@react-navigation/native';
 import {FontAwesome} from "@expo/vector-icons";
 import {API_URL, deleteTweet, getUser} from "../networking/api";
+import {TweetFooter} from "./TweetFooter";
 
 export interface TweetProps {
     tweet: Tweet;
@@ -25,12 +26,6 @@ export interface TweetProps {
 export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, onTweetDeleted}) => {
 
     const [currentUserId, setCurrentUserId] = useState();
-
-    const [imageModalVisible, setImageModalVisible] = useState(false);
-
-    const showImagesModal = () => {
-        setImageModalVisible(true);
-    };
 
     useEffect(() => {
         getUser().then((user) => {
@@ -103,7 +98,8 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
                         {
                             padding: 8,
                             backgroundColor: useThemeColor({light: 'white', dark: '#181818'}, "background"),
-                            borderColor: useThemeColor({light: 'gray', dark: ''}, "background"),
+                            borderColor: useThemeColor({light: 'lightgray', dark: ''}, "background"),
+                            borderWidth: 0.5
                         }
                     }
                 >
@@ -178,6 +174,7 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
                                 </Image>
                             ))}
                         </View>
+                        <TweetFooter tweetId={tweet.id}/>
                     </Card.Body>
                 </Card>
             </SwipeAction>

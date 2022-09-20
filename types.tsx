@@ -13,6 +13,7 @@ export type RootStackParamList = {
   Modal: undefined;
   NotFound: undefined;
   Login: undefined;
+  Registration: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -33,6 +34,8 @@ export type HomeParamList = {
   Profiles: { displayName: string };
   Hashtag: { name: string };
   AddTweet: undefined;
+  Followers: { userId: string }
+  Followees: { userId: string }
 }
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<

@@ -1,10 +1,9 @@
 import {HomeStackScreenProps} from "../../types";
 import React, {useEffect, useState} from "react";
 import {gerUserProfileByDisplayName} from "../../networking/api";
-import {useThemeColor, View} from "../Themed";
+import {View} from "../Themed";
 import {ActivityIndicator} from "@ant-design/react-native";
 import ProfileTweets from "./ProfileTweets";
-import {ScrollView} from "react-native";
 
 export interface UserResponse {
     userId: string,

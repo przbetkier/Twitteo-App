@@ -1,10 +1,10 @@
 import {FontAwesome} from '@expo/vector-icons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
+import {DarkTheme, DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import {ColorSchemeName} from 'react-native';
-
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
@@ -15,11 +15,15 @@ import {RootStackParamList, RootTabParamList, RootTabScreenProps} from '../types
 import LinkingConfiguration from './LinkingConfiguration';
 import LoginScreen from "../screens/LoginScreen";
 import {auth} from "../config/FirebaseConfig";
-import {useEffect, useState} from "react";
 import {User} from "firebase/auth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import Registration from "../screens/Registration";
+import {getUser} from "../networking/api";
 
-export default function Navigation({colorScheme}: { colorScheme: ColorSchemeName }) {
+export default function Navigation({colorScheme, user}: { colorScheme: ColorSchemeName, user: any }) {
+
+    useEffect(() => {
+    }, [user])
+
     return (
         <NavigationContainer
             linking={LinkingConfiguration}
@@ -41,6 +45,7 @@ function RootNavigator() {
             <Stack.Screen name="Root" component={BottomTabNavigator} options={{headerShown: false}}/>
             <Stack.Screen name="NotFound" component={NotFoundScreen} options={{title: 'Oops!'}}/>
             <Stack.Screen name="Login" component={LoginScreen} options={{title: 'Login to Twitteo!'}}/>
+            <Stack.Screen name="Registration" component={Registration} options={{title: 'Registration'}}/>
             <Stack.Group screenOptions={{presentation: 'modal'}}>
                 <Stack.Screen name="Modal" component={ModalScreen}/>
             </Stack.Group>
@@ -48,38 +53,21 @@ function RootNavigator() {
     );
 }
 
-/**
- * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
- * https://reactnavigation.org/docs/bottom-tab-navigator
- */
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
     const colorScheme = useColorScheme();
     const [user, setUser] = useState<User | null>(null);
 
-    const storeData = async (user: User | null) => {
-        if (user) {
-            try {
-                await AsyncStorage.setItem(
-                    'user',
-                    JSON.stringify(user)
-                );
-                setUser(user);
-            } catch (error) {
-            }
-        } else {
-            await AsyncStorage.removeItem(
-                'user'
-            )
-            setUser(null)
-        }
-    };
+    auth.onAuthStateChanged((change) => {
+        setUser(change)
+    })
 
     useEffect(() => {
-        auth.onAuthStateChanged(authUser => {
-            storeData(authUser).then()
-        });
+        getUser().then(user => {
+                setUser(user)
+            }
+        )
     }, [])
 
 
@@ -96,10 +84,9 @@ function BottomTabNavigator() {
                     component={Home}
                     options={({navigation}: RootTabScreenProps<'Home'>) => ({
                         title: 'Home',
-                        tabBarIcon: ({color}) => <TabBarIcon name="home" color={color}/>,
-                        headerRight: () => (<></>),
-                                // FIXME: To be removed or only displayed on Desktop
-                                // <LoginHeader user={user} navigation={navigation}/>
+                        tabBarIcon: ({color}) => <TabBarIcon name="home" color={color}/>
+                        // FIXME: To be removed or only displayed on Desktop
+                        // <LoginHeader user={user} navigation={navigation}/>
 
                     })}
                 />
@@ -132,8 +119,14 @@ function BottomTabNavigator() {
                     name="TabFive"
                     component={LoginScreen}
                     options={{
-                        title: 'Login',
-                        tabBarIcon: ({color}) => <TabBarIcon name="twitter" color={color}/>,
+                        title: user ? 'Profile' : 'Login',
+                        tabBarIcon: ({color}) => (
+                          <>
+                              {!user && <TabBarIcon name="twitter" color={color}/>}
+                              {user && <TabBarIcon name="user-circle" color={color}/>}
+                          </>
+
+                        ),
                     }}
                 />
             </BottomTab.Navigator>

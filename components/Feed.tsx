@@ -3,7 +3,7 @@ import {FlatList} from "react-native";
 import {Button} from "@ant-design/react-native";
 import {getFeed} from "../networking/api";
 import {HomeStackScreenProps} from "../types";
-import {View} from "./Themed";
+import {Text, View} from "./Themed";
 import {FontAwesome} from "@expo/vector-icons";
 import {TweetComponent} from "./TweetComponent";
 import {getWidth} from "../utils/screen";
@@ -32,8 +32,7 @@ export default function Feed({navigation}: HomeStackScreenProps<'Feed'>) {
 
     const getTweets = async (page: number, refresh: boolean = false) => {
         const feed = await getFeed(page);
-        const response = feed as TweetPageResponse;
-        const responseTweets = response.tweets;
+        const responseTweets = feed.tweets;
         refresh ? setTweets(responseTweets) : setTweets([...tweets, ...responseTweets])
         setLoading(false)
         setPage(page + 1);
@@ -98,6 +97,17 @@ export default function Feed({navigation}: HomeStackScreenProps<'Feed'>) {
                         <FontAwesome size={24} name={"plus"}/>
                     </Button>
                     <FlatList
+                        ListEmptyComponent={
+                            <>
+                                <Text style={{textAlign: "center", fontSize: 20}}>
+                                    Your feed is empty
+                                </Text>
+                                <Text style={{textAlign: "center", marginTop: 20}}>
+                                    Add your first tweet or consider following your friends or hashtags that might be
+                                    interesting for you.
+                                </Text>
+                            </>
+                        }
                         style={{minWidth: getWidth()}}
                         data={tweets}
                         refreshing={loading}
