@@ -10,7 +10,8 @@ export interface UserResponse {
     displayName: string,
     followers: number,
     follows: number,
-    bio: string
+    bio: string,
+    avatarUrl: string | null
 }
 
 export default function Profile({navigation, route}: HomeStackScreenProps<'Profiles'>) {
@@ -18,7 +19,6 @@ export default function Profile({navigation, route}: HomeStackScreenProps<'Profi
     const {displayName} = route.params;
     const [loading, setLoading] = useState(false)
     const [user, setUser] = useState<UserResponse | null>(null)
-
 
     const loadProfile = React.useCallback(() => {
         setLoading(true);
@@ -49,7 +49,9 @@ export default function Profile({navigation, route}: HomeStackScreenProps<'Profi
                         }
                     }>
                         {user && (
-                            <ProfileTweets navigation={navigation} user={user}></ProfileTweets>
+                            <ProfileTweets
+                                navigation={navigation} user={user}
+                            />
                         )}
 
                     </View>

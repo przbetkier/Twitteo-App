@@ -3,13 +3,13 @@ import {Text, useThemeColor, View} from "../Themed";
 import {Card} from "@ant-design/react-native";
 import {useNavigation} from "@react-navigation/native";
 import {TouchableOpacity} from "react-native";
+import {BasicUserResponse} from "../../networking/api";
 
 export interface FollowerRecordProps {
-    userId: string;
-    displayName: string;
+   user: BasicUserResponse;
 }
 
-export const FollowerRecord: React.FC<FollowerRecordProps> = ({userId, displayName}) => {
+export const FollowerRecord: React.FC<FollowerRecordProps> = ({user}) => {
 
     const navigation = useNavigation();
 
@@ -22,7 +22,7 @@ export const FollowerRecord: React.FC<FollowerRecordProps> = ({userId, displayNa
             params: {
                 screen: "Profiles",
                 params: {
-                    displayName
+                    displayName: user.displayName
                 }
             }
         });
@@ -51,13 +51,13 @@ export const FollowerRecord: React.FC<FollowerRecordProps> = ({userId, displayNa
                                     style={{
                                         fontSize: 16,
                                         marginLeft: 18
-                                    }}>{displayName}
+                                    }}>{user.displayName}
                                 </Text>
                             </>
 
                         }
                         thumbStyle={{width: 40, height: 40, borderRadius: 50}}
-                        thumb={`https://i.pravatar.cc/150?u=${userId}`}>
+                        thumb={user.avatarUrl !== "" && user.avatarUrl !== null ? user.avatarUrl : `https://i.pravatar.cc/150?u=${user.userId}`}>
                     </Card.Header>
                 </Card>
             </TouchableOpacity>

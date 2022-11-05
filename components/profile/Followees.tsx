@@ -2,7 +2,7 @@ import {HomeStackScreenProps} from "../../types";
 import React, {useEffect, useState} from "react";
 import {BasicUserResponse, getFollowees} from "../../networking/api";
 import {Text, useThemeColor, View} from "../Themed";
-import {ActivityIndicator, Card} from "@ant-design/react-native";
+import {ActivityIndicator} from "@ant-design/react-native";
 import {getWidth} from "../../utils/screen";
 import {FlatList, RefreshControl} from "react-native";
 import {FollowerRecord} from "./FollowerRecord";
@@ -10,9 +10,6 @@ import {FollowerRecord} from "./FollowerRecord";
 export const Followees: React.FC<HomeStackScreenProps<'Followees'>> = ({navigation, route}) => {
 
     const {userId} = route.params;
-
-    const bgColor = useThemeColor({light: 'white', dark: '#181818'}, "background");
-    const borderColor = useThemeColor({light: 'gray', dark: 'white'}, "background");
 
     const [followees, setFollowees] = useState<BasicUserResponse[]>([]);
     const [loading, setLoading] = useState(true);
@@ -49,7 +46,7 @@ export const Followees: React.FC<HomeStackScreenProps<'Followees'>> = ({navigati
 
     const renderBasicUser = (user: BasicUserResponse) => {
         return (
-            <FollowerRecord userId={user.userId} displayName={user.displayName}/>
+            <FollowerRecord user={user}/>
         )
     }
 
@@ -69,7 +66,7 @@ export const Followees: React.FC<HomeStackScreenProps<'Followees'>> = ({navigati
                     <FlatList
                         style={{minWidth: getWidth()}}
                         ListEmptyComponent={
-                            <Text style={{textAlign: "center"}}>This user follows nobody.</Text>
+                            <Text style={{textAlign: "center", marginTop: "50%"}}>This user follows nobody.</Text>
                         }
                         nestedScrollEnabled={false}
                         refreshControl={<RefreshControl refreshing={loading} onRefresh={loadFollowees}/>}

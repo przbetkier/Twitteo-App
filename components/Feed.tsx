@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {FlatList} from "react-native";
+import {ActivityIndicator, FlatList, RefreshControl} from "react-native";
 import {Button} from "@ant-design/react-native";
 import {getFeed} from "../networking/api";
 import {HomeStackScreenProps} from "../types";
@@ -15,8 +15,10 @@ export interface Tweet {
     hashtags: string[];
     userId: string;
     userName: string;
+    avatarUrl: string | null;
     replies: number;
     attachments: number[];
+    edited: boolean;
 }
 
 export interface TweetPageResponse {
@@ -31,6 +33,7 @@ export default function Feed({navigation}: HomeStackScreenProps<'Feed'>) {
     const [page, setPage] = useState(0)
 
     const getTweets = async (page: number, refresh: boolean = false) => {
+        setLoading(true)
         const feed = await getFeed(page);
         const responseTweets = feed.tweets;
         refresh ? setTweets(responseTweets) : setTweets([...tweets, ...responseTweets])
@@ -48,8 +51,8 @@ export default function Feed({navigation}: HomeStackScreenProps<'Feed'>) {
         }
     }, [])
 
-    useEffect(() => {
-    }, [tweets])
+    // useEffect(() => {
+    // }, [tweets])
 
     const handleLoadMore = () => {
         getTweets(page).then()
@@ -64,7 +67,12 @@ export default function Feed({navigation}: HomeStackScreenProps<'Feed'>) {
         <TweetComponent key={`tweet-${tweet.id}`} tweet={tweet} onTweetDeleted={handleTweetDeleted}/>
     );
 
-    function refresh() {
+    const refresh = () => {
+        getTweets(0, true).then();
+    }
+
+    const clearRefresh = () => {
+        setTweets([])
         getTweets(0, true).then();
     }
 
@@ -99,19 +107,31 @@ export default function Feed({navigation}: HomeStackScreenProps<'Feed'>) {
                     <FlatList
                         ListEmptyComponent={
                             <>
-                                <Text style={{textAlign: "center", fontSize: 20}}>
-                                    Your feed is empty
-                                </Text>
-                                <Text style={{textAlign: "center", marginTop: 20}}>
-                                    Add your first tweet or consider following your friends or hashtags that might be
-                                    interesting for you.
-                                </Text>
+                                {!loading && (
+                                    <>
+                                        <Text style={{textAlign: "center", fontSize: 20}}>
+                                            Your feed is empty
+                                        </Text>
+                                        <Text style={{textAlign: "center", marginTop: 20}}>
+                                            Add your first tweet or consider following your friends or hashtags that
+                                            might
+                                            be interesting for you.
+                                        </Text>
+                                    </>
+                                )}
+                                {loading && (
+                                    <ActivityIndicator size={"small"}/>
+                                )}
                             </>
                         }
                         style={{minWidth: getWidth()}}
                         data={tweets}
-                        refreshing={loading}
-                        onRefresh={refresh}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={loading}
+                                onRefresh={clearRefresh}
+                            />
+                        }
                         renderItem={({item}) => renderTweet(item)}
                         keyExtractor={(item) => item.id}
                         onEndReached={handleLoadMore}

@@ -48,7 +48,7 @@ export default function Hashtag({navigation, route}: HomeStackScreenProps<'Hasht
     }
 
     const renderTweet = (tweet: Tweet) => (
-        <TweetComponent key={`${tweet.id + Date.now()}`} tweet={tweet} onTweetDeleted={handleTweetDeleted}/>
+        <TweetComponent key={`${tweet.id}`} tweet={tweet} onTweetDeleted={handleTweetDeleted}/>
     );
 
     const handleLoadMore = () => {

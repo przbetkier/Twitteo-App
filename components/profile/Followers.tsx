@@ -45,7 +45,7 @@ export const Followers: React.FC<HomeStackScreenProps<'Followees'>> = ({navigati
 
     const renderBasicUser = (user: BasicUserResponse) => {
         return (
-            <FollowerRecord userId={user.userId} displayName={user.displayName}/>
+            <FollowerRecord user={user}/>
         )
     }
 

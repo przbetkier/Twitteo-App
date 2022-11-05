@@ -1,18 +1,20 @@
 import React, {useEffect, useState} from "react";
 import {Tweet} from "../Feed";
 import {getUserPosts} from "../../networking/api";
-import {FlatList, RefreshControl} from "react-native";
+import {FlatList, RefreshControl, View} from "react-native";
 import {TweetComponent} from "../TweetComponent";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
-import {Text, View} from "../Themed";
-import {ActivityIndicator} from "@ant-design/react-native";
+import {Text} from "../Themed";
+import {ActivityIndicator, Flex} from "@ant-design/react-native";
 import {UserResponse} from "./Profile";
 import {Bio} from "./Bio";
 import {getWidth} from "../../utils/screen";
+import {SimpleLineIcons} from '@expo/vector-icons';
+import {tintColorLight} from "../../constants/Colors";
 
 export interface ProfileTweetsProps {
     user: UserResponse,
-    navigation: NativeStackNavigationProp<any, any>
+    navigation: NativeStackNavigationProp<any, any>,
 }
 
 export default function ProfileTweets({user, navigation}: ProfileTweetsProps) {
@@ -59,9 +61,8 @@ export default function ProfileTweets({user, navigation}: ProfileTweetsProps) {
         getTweets(page).then();
     }
 
-
     return (
-        <>
+        <View style={{height: "100%"}}>
             {loading && (<ActivityIndicator color={"gray"} size={"large"}/>)}
             {!loading && (
                 <FlatList
@@ -70,7 +71,19 @@ export default function ProfileTweets({user, navigation}: ProfileTweetsProps) {
                         <Bio user={user}/>
                     }
                     ListEmptyComponent={
-                        <Text style={{textAlign: "center"}}>This user has no tweets right now.</Text>
+                        <View style={{height: "100%"}}>
+                            <Flex direction={"column"} justify={"center"} align={"center"}
+                                  style={{height: "100%", maxHeight: "100%"}}>
+                                <SimpleLineIcons name="ghost" size={100} color={tintColorLight}/>
+                                <Flex direction={"column"} style={{maxWidth: 300}}>
+                                    <Text style={{marginTop: 16, textAlign: "center"}}>Oooops! It looks like this
+                                        user hasn't added any posts
+                                        yet.</Text>
+                                    <Text style={{marginTop: 16, textAlign: "center"}}>Nothing is lost! Follow him to see new posts as quickly as possible!</Text>
+                                </Flex>
+
+                            </Flex>
+                        </View>
                     }
                     stickyHeaderIndices={[0]}
                     nestedScrollEnabled={false}
@@ -85,6 +98,6 @@ export default function ProfileTweets({user, navigation}: ProfileTweetsProps) {
                 >
                 </FlatList>
             )}
-        </>
+        </View>
     )
 }

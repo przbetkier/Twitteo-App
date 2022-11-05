@@ -123,7 +123,7 @@ export default function SearchScreen() {
 
                                                         }
                                                         thumbStyle={{width: 40, height: 40, borderRadius: 50}}
-                                                        thumb={`https://i.pravatar.cc/150?u=${user.userId}`}>
+                                                        thumb={user.avatarUrl !== "" && user.avatarUrl !== null ? user.avatarUrl : `https://i.pravatar.cc/150?u=${user.userId}`}>
                                                     </Card.Header>
 
                                                 </Card>

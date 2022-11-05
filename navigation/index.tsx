@@ -18,6 +18,7 @@ import {auth} from "../config/FirebaseConfig";
 import {User} from "firebase/auth";
 import Registration from "../screens/Registration";
 import {getUser} from "../networking/api";
+import {MaterialCommunityIcons} from '@expo/vector-icons';
 
 export default function Navigation({colorScheme, user}: { colorScheme: ColorSchemeName, user: any }) {
 
@@ -111,20 +112,26 @@ function BottomTabNavigator() {
                     name="TabFour"
                     component={SearchScreen}
                     options={{
-                        title: 'Tab Four',
-                        tabBarIcon: ({color}) => <TabBarIcon name="inbox" color={color}/>,
+                        title: 'Explore',
+                        tabBarIcon: ({color}) => (
+                            <MaterialCommunityIcons
+                                name="telescope" size={30}
+                                style={{marginBottom: -3}} color={color}
+                            />
+                        ),
                     }}
                 />
                 <BottomTab.Screen
                     name="TabFive"
                     component={LoginScreen}
                     options={{
+                        headerShown: true,
                         title: user ? 'Profile' : 'Login',
                         tabBarIcon: ({color}) => (
-                          <>
-                              {!user && <TabBarIcon name="twitter" color={color}/>}
-                              {user && <TabBarIcon name="user-circle" color={color}/>}
-                          </>
+                            <>
+                                {!user && <TabBarIcon name="twitter" color={color}/>}
+                                {user && <TabBarIcon name="user-circle" color={color}/>}
+                            </>
 
                         ),
                     }}
