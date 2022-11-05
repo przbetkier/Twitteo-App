@@ -4,12 +4,15 @@ import {FontAwesome} from "@expo/vector-icons";
 import {tintColorLight} from "../constants/Colors";
 import {getTweetLikeState, likeTweet, TweetLikeState, TweetLikeStateResponse} from "../networking/api";
 import {ActivityIndicator, View} from "react-native";
+import {MaterialIcons} from '@expo/vector-icons';
+
 
 export interface TweetFooterProps {
     tweetId: string;
+    edited: boolean;
 }
 
-export const TweetFooter: React.FC<TweetFooterProps> = ({tweetId}) => {
+export const TweetFooter: React.FC<TweetFooterProps> = ({tweetId, edited}) => {
 
     const [likes, setLikes] = useState(0)
     const [loading, setLoading] = useState(true)
@@ -36,21 +39,40 @@ export const TweetFooter: React.FC<TweetFooterProps> = ({tweetId}) => {
     }
 
     const handleLikeIconClicked = () => {
-        if (likeState === TweetLikeState.CAN_LIKE) {
-            likeTweet(tweetId, true).then(res => handleLikeResponse(res, true))
-        } else {
-            likeTweet(tweetId, false).then(res => handleLikeResponse(res, false))
-        }
+        let canLike = (likeState === TweetLikeState.CAN_LIKE)
+        setLoading(true)
+        likeTweet(tweetId, canLike)
+            .then(res => {
+                handleLikeResponse(res, canLike)
+                setLoading(false)
+            })
     }
 
     return (
-        <View style={{marginTop: 12, borderTopWidth: 0.5, borderColor: "lightgray", padding: 8}}>
-            {loading ? <ActivityIndicator/> : (
-                <>
-                    <Text><FontAwesome name={iconName()} size={16} color={tintColorLight}
-                                       onPress={handleLikeIconClicked}/> {likes} </Text>
-                </>
-            )}
+        <View style={{borderTopWidth: 0.5, borderColor: "lightgray"}}>
+            <View style={{marginTop: 8, justifyContent: "space-between", flexDirection: "row"}}>
+                {loading && (<ActivityIndicator/>)}
+                {!loading && (<View style={{display: "flex", flexDirection: "row"}}>
+                    <FontAwesome name={iconName()}
+                                 size={16}
+                                 color={tintColorLight}
+                                 onPress={handleLikeIconClicked}
+                    />
+                    <Text style={{paddingLeft: 8}}>{likes}</Text>
+                </View>)
+                }
+                <Text>
+                    {edited && (
+                        <View style={{display: "flex", flexDirection: "row", justifyContent: "flex-end"}}>
+                            <Text style={{fontStyle: "italic", color: "gray"}}>
+                                Edited
+                            </Text>
+                            <MaterialIcons name="published-with-changes" size={20} color="orange"
+                                           style={{paddingLeft: 8}}/>
+                        </View>
+                    )}
+                </Text>
+            </View>
 
         </View>
     )

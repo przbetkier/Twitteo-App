@@ -2,9 +2,12 @@ import {Tweet} from "./Feed";
 import {Text, useThemeColor} from "./Themed"
 import {Card, Flex, SwipeAction, Toast, WhiteSpace} from "@ant-design/react-native";
 import {formatDate} from "../utils/date-util";
+import moment from "moment";
 import {tintColorLight} from "../constants/Colors";
 import {
-    Animated, Image,
+    ActivityIndicator,
+    Animated,
+    Image,
     Linking,
     StyleSheet,
     TouchableOpacity,
@@ -14,8 +17,11 @@ import React, {useEffect, useState} from "react";
 import ParsedText from "react-native-parsed-text";
 import {useNavigation} from '@react-navigation/native';
 import {FontAwesome} from "@expo/vector-icons";
-import {API_URL, deleteTweet, getUser} from "../networking/api";
+import {API_URL, deleteTweet, getUser, updateTweet} from "../networking/api";
 import {TweetFooter} from "./TweetFooter";
+import {TweetEditForm} from "./TweetEdit";
+
+type TweetMode = "READ" | "EDIT"
 
 export interface TweetProps {
     tweet: Tweet;
@@ -26,6 +32,11 @@ export interface TweetProps {
 export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, onTweetDeleted}) => {
 
     const [currentUserId, setCurrentUserId] = useState();
+    const [mode, setMode] = useState<TweetMode>('READ')
+
+    const swipeActionRef = React.createRef<SwipeAction>();
+    const [post, setPost] = useState(tweet)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         getUser().then((user) => {
@@ -34,6 +45,11 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
     }, []);
 
     const navigation = useNavigation();
+
+    const isEditPossible = () => {
+        const minutesSincePosted = moment.duration(moment(new Date()).diff(post.createdAt)).asMinutes()
+        return minutesSincePosted < 5
+    }
 
     const handleOriginalPosterClicked = (userName: string) => {
         navigation.navigate('Root', {
@@ -55,44 +71,101 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
 
     const handleDelete = (progressAnimatedValue: Animated.AnimatedInterpolation, dragAnimatedValue: Animated.AnimatedInterpolation) => {
 
-        if (tweet.userId === currentUserId && !deletionDisabled) {
+        if (post.userId === currentUserId && !deletionDisabled) {
             return (
                 <View
                     style={{
                         margin: 0,
-                        alignContent: 'center',
-                        backgroundColor: 'red',
                         justifyContent: 'center',
+                        backgroundColor: 'red',
+                        alignItems: 'center',
                         width: '25%',
                         maxWidth: 300,
                     }}
                 >
-                    <FontAwesome name={"trash"} color={"white"} size={36} style={{textAlign: "center"}}
-                                 onPress={handleTweetDeleted}></FontAwesome>
+                    <FontAwesome name={"trash"}
+                                 color={"white"}
+                                 size={36}
+                                 onPress={handleTweetDeleted}
+                    />
+                    <Text style={{color: "white"}}>Delete</Text>
                 </View>
             );
         } else return (<View></View>)
     };
 
+    const handleEdit = (progressAnimatedValue: Animated.AnimatedInterpolation, dragAnimatedValue: Animated.AnimatedInterpolation) => {
+
+        if (post.userId === currentUserId && !deletionDisabled && isEditPossible()) {
+            return (
+                <View
+                    style={{
+                        margin: 0,
+                        justifyContent: 'center',
+                        backgroundColor: tintColorLight,
+                        alignItems: 'center',
+                        width: '25%',
+                        maxWidth: 300,
+                    }}
+                >
+                    <FontAwesome name={"edit"}
+                                 color={"white"}
+                                 size={36}
+                                 onPress={() => {
+                                     swipeActionRef?.current?.close();
+                                     setMode("EDIT");
+                                 }}
+                    />
+                    <Text style={{color: "white"}}>Edit</Text>
+                </View>
+            );
+        } else return (<View></View>)
+    };
+
+    const handleEditionSubmitted = (txt: string) => {
+        setMode('READ');
+        setLoading(true)
+        updateTweet({tweetId: post.id, content: txt})
+            .then(resp => {
+                setPost(resp)
+            })
+            .catch(e => {
+                console.log(e)
+            })
+            .finally(() => setLoading(false))
+    }
+
+    const handleEditionCancelled = () => {
+        setMode('READ');
+    }
+
     const handleTweetDeleted = () => {
-        deleteTweet(tweet.id)
+        swipeActionRef?.current?.close();
+        setLoading(true)
+        deleteTweet(post.id)
             .then(() => {
-                    onTweetDeleted(tweet);
+                    onTweetDeleted(post);
 
                     Toast.success({
                         duration: 0.5,
                         content: "Tweet successfully deleted!",
+                        mask: false
                     });
                 }
             )
             .catch((e) => {
                 console.log(`Error occurred: ${e}`)
             })
+            .finally(() => setLoading(false))
     }
 
     return (
-        <>
-            <SwipeAction renderRightActions={handleDelete}>
+        <View>
+            <SwipeAction
+                key={`${post.id}-swipe`}
+                ref={swipeActionRef} renderRightActions={handleDelete} renderLeftActions={handleEdit}
+                containerStyle={{padding: 0}}
+            >
                 <Card
                     style={
                         {
@@ -104,61 +177,80 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
                     }
                 >
                     <Card.Header
+                        style={{marginLeft: 0}}
                         title={
                             <Flex justify={"between"}>
-                                <TouchableOpacity onPress={() => handleOriginalPosterClicked(tweet.userName)}>
-                                    <Text style={{color: `${tintColorLight}`}}>{'@' + tweet.userName}</Text>
+                                <TouchableOpacity onPress={() => handleOriginalPosterClicked(post.userName)}>
+                                    <Text style={{color: `${tintColorLight}`}}>{'@' + post.userName}</Text>
                                 </TouchableOpacity>
-                                <Text>{formatDate(tweet.createdAt)}</Text>
+                                <Text>{formatDate(post.createdAt)}</Text>
                             </Flex>
                         }
                         thumbStyle={{width: 35, height: 35, borderRadius: 35}}
-                        thumb={`https://i.pravatar.cc/150?u=${tweet.userId}`}
+                        thumb={(post.avatarUrl !== "") ? post.avatarUrl : `https://i.pravatar.cc/150?u=${post.userId}`}
                     />
                     <Card.Body>
-                        <ParsedText
-                            style={{marginLeft: 2, color: useThemeColor({light: 'black', dark: 'white'}, "text")}}
-                            parse={
-                                [
-                                    {
-                                        type: 'url', style: styles.url, onPress: (url) => {
-                                            handleLinkClicked(url)
-                                        }
-                                    },
-                                    {
-                                        pattern: /\B@\S+\b/, style: styles.username, onPress: (username) => {
-                                            navigation.navigate('Root', {
-                                                screen: "Home",
-                                                params: {
-                                                    screen: "Profiles",
+                        {loading && (<ActivityIndicator size="small"/>)}
+                        <View>
+                            <ParsedText
+                                style={{
+                                    marginLeft: 2,
+                                    display: mode === "READ" ? "flex" : "none",
+                                    color: useThemeColor({light: 'black', dark: 'white'}, "text")
+                                }}
+                                parse={
+                                    [
+                                        {
+                                            type: 'url', style: styles.url, onPress: (url) => {
+                                                handleLinkClicked(url)
+                                            }
+                                        },
+                                        {
+                                            pattern: /\B@\S+\b/, style: styles.username, onPress: (username) => {
+                                                navigation.navigate('Root', {
+                                                    screen: "Home",
                                                     params: {
-                                                        displayName: username.substring(1) // FIXME handle screens by displayname!
+                                                        screen: "Profiles",
+                                                        params: {
+                                                            displayName: username.substring(1) // FIXME handle screens by displayname!
+                                                        }
                                                     }
-                                                }
-                                            });
-                                        }
-                                    },
-                                    {
-                                        pattern: /#(\w+)/, style: styles.hashTag, onPress: (hashtag) => {
-                                            navigation.navigate('Root', {
-                                                screen: "Home",
-                                                params: {
-                                                    screen: "Hashtag",
+                                                });
+                                            }
+                                        },
+                                        {
+                                            pattern: /#(\w+)/, style: styles.hashTag, onPress: (hashtag) => {
+                                                navigation.navigate('Root', {
+                                                    screen: "Home",
                                                     params: {
-                                                        name: hashtag.substring(1)
+                                                        screen: "Hashtag",
+                                                        params: {
+                                                            name: hashtag.substring(1)
+                                                        }
                                                     }
-                                                }
-                                            });
-                                        }
-                                    },
-                                ]
-                            }
-                            childrenProps={{allowFontScaling: true}}
-                        >
-                            {tweet.content}
-                        </ParsedText>
+                                                });
+                                            }
+                                        },
+                                    ]
+                                }
+                                childrenProps={{allowFontScaling: true}}
+                            >
+                                {post.content}
+
+                            </ParsedText>
+
+                            {mode === 'EDIT' && (
+                                <TweetEditForm tweet={post}
+                                               onEditionSubmitted={(txt: string) => {
+                                                   handleEditionSubmitted(txt)
+                                               }}
+                                               onEditionCancelled={handleEditionCancelled}
+                                />
+                            )}
+                        </View>
+
                         <View style={{marginTop: 8}}>
-                            {tweet.attachments.map(image => (
+                            {post.attachments.map(image => (
 
                                 <Image
                                     key={`image-${image}`}
@@ -174,12 +266,12 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
                                 </Image>
                             ))}
                         </View>
-                        <TweetFooter tweetId={tweet.id}/>
+                        <TweetFooter tweetId={post.id} edited={post.edited}/>
                     </Card.Body>
                 </Card>
             </SwipeAction>
             <WhiteSpace/>
-        </>
+        </View>
     )
 }
 
@@ -191,7 +283,6 @@ const styles = StyleSheet.create({
     username: {
         color: tintColorLight,
     },
-
     hashTag: {
         color: tintColorLight,
     },

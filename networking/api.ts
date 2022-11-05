@@ -7,7 +7,7 @@ import {toExtension} from "../utils/mime";
 import {getBlobFromUri} from "../utils/blob";
 
 // const API_URL = "http://167.99.129.28:8080"
-export const API_URL = "http://localhost:8080"
+export const API_URL = "http://127.0.0.1:8080"
 
 export const getUser = async (): Promise<any> => {
     const user = await AsyncStorage.getItem('user')
@@ -89,6 +89,38 @@ export const uploadImage = async (imageUri: string): Promise<ObjectUploadRespons
     const user = await getUser()
     const token = await user.stsTokenManager.accessToken
 
+    const formData = await composeUploadFormData(imageUri)
+
+    return await fetch(URL_ATTACHMENT_UPLOAD_URL, {
+        headers: {
+            ...headers(token).headers,
+        },
+        method: "POST",
+        body: formData,
+    })
+        .then(res => res.json())
+        .catch(err => console.log(err))
+}
+
+export const uploadAvatar = async (imageUri: string): Promise<AvatarUploadResponse> => {
+    const URL_AVATAR_UPLOAD_URL = `${API_URL}/users/avatar`
+    const user = await getUser()
+    const token = await user.stsTokenManager.accessToken
+
+    const formData = await composeUploadFormData(imageUri)
+
+    return await fetch(URL_AVATAR_UPLOAD_URL, {
+        headers: {
+            ...headers(token).headers,
+        },
+        method: "POST",
+        body: formData,
+    })
+        .then(res => res.json())
+        .catch(err => console.log(err))
+}
+
+const composeUploadFormData = async (imageUri: string): Promise<FormData> => {
     const formData = new FormData();
 
     if (Platform.OS === 'web') {
@@ -105,16 +137,8 @@ export const uploadImage = async (imageUri: string): Promise<ObjectUploadRespons
             name: fileName
         } as any)
     }
+    return formData;
 
-    return await fetch(URL_ATTACHMENT_UPLOAD_URL, {
-        headers: {
-            ...headers(token).headers,
-        },
-        method: "POST",
-        body: formData,
-    })
-        .then(res => res.json())
-        .catch(err => console.log(err))
 }
 
 export const search = async (query: string): Promise<SearchResult> => {
@@ -182,7 +206,7 @@ export const likeTweet = async (tweetId: string, like: boolean) => {
     const user = await getUser()
     const token = await user.stsTokenManager.accessToken
 
-    const response = await fetch(`${API_URL}/tweets/${tweetId}/${like ? "like": "unlike"}`, {
+    const response = await fetch(`${API_URL}/tweets/${tweetId}/${like ? "like" : "unlike"}`, {
         headers: {
             ...headers(token).headers,
         },
@@ -202,6 +226,46 @@ export const signUp = async (token: string, displayName: string) => {
     });
 }
 
+export const updateProfile = async (profileUpdateRequest: ProfileUpdateRequest) => {
+    const user = await getUser()
+    const token = await user.stsTokenManager.accessToken
+
+    const response = await fetch(`${API_URL}/users/profile`, {
+        headers: {
+            'Content-Type': 'application/json',
+            ...headers(token).headers,
+        },
+        method: "POST",
+        body: JSON.stringify(profileUpdateRequest)
+    })
+    return await response.json() as UserResponse
+}
+
+export const updateTweet = async (tweetEditRequest: TweetEditRequest) => {
+    const user = await getUser()
+    const token = await user.stsTokenManager.accessToken
+
+    const response = await fetch(`${API_URL}/tweets/${tweetEditRequest.tweetId}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            ...headers(token).headers,
+        },
+        method: "PATCH",
+        body: JSON.stringify(tweetEditRequest)
+    })
+    return await response.json() as Tweet
+}
+
+export interface TweetEditRequest {
+    tweetId: string;
+    content: string;
+}
+
+export interface ProfileUpdateRequest {
+    bio?: string,
+    avatarUrl?: string
+}
+
 export enum TweetLikeState {
     CAN_LIKE = "CAN_LIKE",
     CAN_UNLIKE = "CAN_UNLIKE"
@@ -215,6 +279,7 @@ export interface TweetLikeStateResponse {
 export interface BasicUserResponse {
     userId: string;
     displayName: string;
+    avatarUrl: string | null;
 }
 
 export interface ObjectUploadResponse {
@@ -222,6 +287,9 @@ export interface ObjectUploadResponse {
     name: string
 }
 
+export interface AvatarUploadResponse {
+    url: string
+}
 
 export interface FollowersResponse {
     followers: BasicUserResponse[]

@@ -1,9 +1,17 @@
 import {HomeStackScreenProps} from "../types";
 import {Text, useThemeColor, View} from "./Themed";
-import {Card} from "@ant-design/react-native";
+import {Card, Flex} from "@ant-design/react-native";
 import * as ImagePicker from 'expo-image-picker';
 import {useState} from "react";
-import {Dimensions, ImageBackground, Pressable, StyleSheet, TextInput, TouchableHighlight} from "react-native";
+import {
+    ActivityIndicator,
+    Dimensions,
+    ImageBackground,
+    Pressable,
+    StyleSheet,
+    TextInput,
+    TouchableHighlight,
+} from "react-native";
 import {API_URL, ObjectUploadResponse, postTweet, uploadImage} from "../networking/api";
 import {getWidth} from "../utils/screen";
 import {FontAwesome} from "@expo/vector-icons";
@@ -16,7 +24,7 @@ export default function AddTweet({navigation, route}: HomeStackScreenProps<'AddT
     const [isPosting, setIsPosting] = useState(false);
 
     const attachments = (): number[] => {
-        if(image) {
+        if (image) {
             return [image.id]
         } else {
             return []
@@ -76,10 +84,10 @@ export default function AddTweet({navigation, route}: HomeStackScreenProps<'AddT
         input: {
             height: Dimensions.get('window').height / 4,
             backgroundColor: useThemeColor({light: 'white', dark: '#181818'}, "background"),
+            color: useThemeColor({light: 'black', dark: 'white'}, "text"),
             borderBottomColor: useThemeColor({light: 'lightgray', dark: 'white'}, "background"),
             borderBottomWidth: 0.5,
             padding: 10,
-            color: useThemeColor({light: 'black', dark: 'white'}, "text"),
         },
     });
 
@@ -97,9 +105,19 @@ export default function AddTweet({navigation, route}: HomeStackScreenProps<'AddT
                     padding: 10,
                     justifyContent: "space-between"
                 }}>
-                    <Text
-                        style={{color: tintColorLight, padding: 8}}
-                        onPress={() => handleTweetSubmitted()}>Tweet</Text>
+                    {isPosting ? (
+                        <Flex direction={"row"}>
+                            <Text
+                                style={{color: "gray", padding: 8}}>Tweet</Text>
+                            <ActivityIndicator size={"small"}/>
+                        </Flex>
+                    ) : (
+                        <Text
+                            style={{color: tintColorLight, padding: 8}}
+                            onPress={() => handleTweetSubmitted()}>Tweet</Text>
+                    )}
+
+
                     <Text
                         style={{color: 'red', padding: 8}}
                         onPress={() => navigation.goBack()}

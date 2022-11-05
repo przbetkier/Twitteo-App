@@ -82,7 +82,6 @@ export const Bio: React.FC<BioProperties> = ({user}) => {
                 style={
                     {
                         padding: 8,
-                        marginBottom: 8,
                         backgroundColor: bgColor,
                         borderColor: borderColor,
                         borderWidth: 0.5
@@ -122,14 +121,15 @@ export const Bio: React.FC<BioProperties> = ({user}) => {
                         </View>
                     }
                     thumbStyle={{width: 60, height: 60, borderRadius: 50}}
-                    thumb={`https://i.pravatar.cc/150?u=${user?.userId}`}>
+                    thumb={user.avatarUrl !== "" ? user.avatarUrl : `https://i.pravatar.cc/150?u=${user.userId}`}>
 
                 </Card.Header>
-                <Card.Body style={{padding: 10}}>
-                    <Text>Bio:</Text>
-                    <ItalicText>{user?.bio}</ItalicText>
-
-                    <WhiteSpace/>
+                <Card.Body style={{justifyContent: "center"}}>
+                    {user?.bio !== '' && (<>
+                        <ItalicText>{user?.bio}</ItalicText>
+                        <WhiteSpace/>
+                    </>)
+                    }
 
                     <Flex justify={"around"}>
                         <TouchableOpacity onPress={navigateToFollowers}>

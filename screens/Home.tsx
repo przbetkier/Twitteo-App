@@ -49,11 +49,14 @@ export default function Home() {
                                 title: 'Feed',
                                 headerRight: () => (
                                     <View style={{backgroundColor: "transparent"}}>
-                                        {user && (
-                                            <Image style={{width: 30, height: 30, borderRadius: 15}}
-                                                   source={{uri: `https://i.pravatar.cc/150?u=${user.uid}`}}/>
-                                        )}
-                                    </View>),
+                                        {/*<Text>{user}</Text>*/}
+                                        {/*{user && (*/}
+                                        {/*    <Image style={{width: 30, height: 30, borderRadius: 15}}*/}
+                                        {/*           source={{uri: `https://i.pravatar.cc/150?u=${user.uid}`}}/>*/}
+                                        {/*)}*/}
+                                        {/*    TODO : TBD if needed that profile img */}
+                                    </View>
+                                ),
                             }}
                         />
                         <Stack.Screen

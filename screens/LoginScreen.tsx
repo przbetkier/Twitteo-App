@@ -8,6 +8,7 @@ import {RootStackScreenProps} from "../types";
 import {getUser} from "../networking/api";
 import {tintColorLight} from "../constants/Colors";
 import {FontAwesome} from "@expo/vector-icons";
+import {ProfileEditScreen} from "./ProfileEditScreen";
 
 export default function LoginScreen({navigation}: RootStackScreenProps<'Login'>) {
 
@@ -68,38 +69,19 @@ export default function LoginScreen({navigation}: RootStackScreenProps<'Login'>)
         });
     }
 
-    const logout = () => {
-        setLoading(true)
-        auth.signOut().then(() => {
-                setUser(null)
-                setLoading(false)
-            }
-        )
-    }
-
     useEffect(() => {
         loadUser()
     }, [])
 
     return (
-        <View style={styles.container}>
+        <>
             {loading ? (<ActivityIndicator/>) : (<>
-                {user ? (<>
-                    <Text>
-                        Logged as user {user.uid}
-                    </Text>
-                    <Text>
-                        Your email is {user.email}
-                    </Text>
-                    <Text>
-                        Your bio is {String(user.emailVerified)}
-                    </Text>
-                    <Button
-                        type={"warning"}
-                        onPress={logout}
-                    >Logout</Button>
-                </>) : (
-                    <>
+                {user ? (
+                    <ProfileEditScreen user={user}/>
+                ) : (
+                    <View
+                        style={styles.container}
+                    >
                         <Text style={styles.title}>Login to Twitteo</Text>
 
                         <TextInput value={email}
@@ -133,10 +115,10 @@ export default function LoginScreen({navigation}: RootStackScreenProps<'Login'>)
                                 Don't have an account?
                             </Text>
                         </>
-                    </>
+                    </View>
                 )}
             </>)}
-        </View>
+        </>
 
     );
 }
