@@ -11,7 +11,7 @@ import {auth} from '../config/FirebaseConfig';
 import Hashtag from "../components/hashtag/Hashtag";
 import {Followers} from "../components/profile/Followers";
 import {Followees} from "../components/profile/Followees";
-import {Image} from "react-native";
+import TweetScreen from "../components/TweetScreen";
 
 export default function Home() {
 
@@ -46,17 +46,7 @@ export default function Home() {
                             name="Feed"
                             component={Feed}
                             options={{
-                                title: 'Feed',
-                                headerRight: () => (
-                                    <View style={{backgroundColor: "transparent"}}>
-                                        {/*<Text>{user}</Text>*/}
-                                        {/*{user && (*/}
-                                        {/*    <Image style={{width: 30, height: 30, borderRadius: 15}}*/}
-                                        {/*           source={{uri: `https://i.pravatar.cc/150?u=${user.uid}`}}/>*/}
-                                        {/*)}*/}
-                                        {/*    TODO : TBD if needed that profile img */}
-                                    </View>
-                                ),
+                                title: 'Feed'
                             }}
                         />
                         <Stack.Screen
@@ -64,6 +54,13 @@ export default function Home() {
                             component={Profile}
                             options={{
                                 title: 'Profiles'
+                            }}
+                        />
+                        <Stack.Screen
+                            name="Tweet"
+                            component={TweetScreen}
+                            options={{
+                                title: 'Tweet'
                             }}
                         />
                         <Stack.Screen

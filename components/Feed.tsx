@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {ActivityIndicator, FlatList, RefreshControl} from "react-native";
-import {Button} from "@ant-design/react-native";
+import {Button, WhiteSpace} from "@ant-design/react-native";
 import {getFeed} from "../networking/api";
 import {HomeStackScreenProps} from "../types";
 import {Text, View} from "./Themed";
@@ -31,12 +31,14 @@ export default function Feed({navigation}: HomeStackScreenProps<'Feed'>) {
     const [tweets, setTweets] = useState<Tweet[]>([])
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0)
+    const [total, setTotal] = useState(0)
 
     const getTweets = async (page: number, refresh: boolean = false) => {
         setLoading(true)
         const feed = await getFeed(page);
         const responseTweets = feed.tweets;
         refresh ? setTweets(responseTweets) : setTweets([...tweets, ...responseTweets])
+        setTotal(feed.total)
         setLoading(false)
         setPage(page + 1);
     }
@@ -51,11 +53,10 @@ export default function Feed({navigation}: HomeStackScreenProps<'Feed'>) {
         }
     }, [])
 
-    // useEffect(() => {
-    // }, [tweets])
-
     const handleLoadMore = () => {
-        getTweets(page).then()
+        if (tweets.length < total) {
+            getTweets(page).then()
+        }
     }
 
     const handleTweetDeleted = (tweet: Tweet) => {
@@ -101,10 +102,13 @@ export default function Feed({navigation}: HomeStackScreenProps<'Feed'>) {
                         height: 50,
                         borderRadius: 100
                     }}
-                        onPress={() => navigation.navigate('AddTweet')}>
+                        onPress={() => navigation.navigate('AddTweet', {replyTo: null})}>
                         <FontAwesome size={24} name={"plus"}/>
                     </Button>
                     <FlatList
+                        ItemSeparatorComponent={() =>
+                            <WhiteSpace size={"xl"}/>
+                        }
                         ListEmptyComponent={
                             <>
                                 {!loading && (

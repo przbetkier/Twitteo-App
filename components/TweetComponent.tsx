@@ -1,6 +1,6 @@
 import {Tweet} from "./Feed";
 import {Text, useThemeColor} from "./Themed"
-import {Card, Flex, SwipeAction, Toast, WhiteSpace} from "@ant-design/react-native";
+import {Card, Flex, SwipeAction, Toast} from "@ant-design/react-native";
 import {formatDate} from "../utils/date-util";
 import moment from "moment";
 import {tintColorLight} from "../constants/Colors";
@@ -76,6 +76,7 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
                 <View
                     style={{
                         margin: 0,
+                        padding: 0,
                         justifyContent: 'center',
                         backgroundColor: 'red',
                         alignItems: 'center',
@@ -164,18 +165,18 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
             <SwipeAction
                 key={`${post.id}-swipe`}
                 ref={swipeActionRef} renderRightActions={handleDelete} renderLeftActions={handleEdit}
-                containerStyle={{padding: 0}}
             >
                 <Card
                     style={
                         {
                             padding: 8,
                             backgroundColor: useThemeColor({light: 'white', dark: '#181818'}, "background"),
-                            borderColor: useThemeColor({light: 'lightgray', dark: ''}, "background"),
-                            borderWidth: 0.5
+                            borderColor: '#2c2b2b',
+                            borderWidth: 0.22,
                         }
                     }
                 >
+
                     <Card.Header
                         style={{marginLeft: 0}}
                         title={
@@ -189,7 +190,9 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
                         thumbStyle={{width: 35, height: 35, borderRadius: 35}}
                         thumb={(post.avatarUrl !== "") ? post.avatarUrl : `https://i.pravatar.cc/150?u=${post.userId}`}
                     />
+
                     <Card.Body>
+
                         {loading && (<ActivityIndicator size="small"/>)}
                         <View>
                             <ParsedText
@@ -240,11 +243,12 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
                             </ParsedText>
 
                             {mode === 'EDIT' && (
-                                <TweetEditForm tweet={post}
-                                               onEditionSubmitted={(txt: string) => {
-                                                   handleEditionSubmitted(txt)
-                                               }}
-                                               onEditionCancelled={handleEditionCancelled}
+                                <TweetEditForm
+                                    tweet={post}
+                                    onEditionSubmitted={(txt: string) => {
+                                        handleEditionSubmitted(txt)
+                                    }}
+                                    onEditionCancelled={handleEditionCancelled}
                                 />
                             )}
                         </View>
@@ -260,17 +264,28 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
                                         width: '100%'
                                     }}
                                     source={{uri: `${API_URL}/attachments/${image}`}}
-
                                     resizeMode={"contain"}
                                 >
                                 </Image>
                             ))}
                         </View>
-                        <TweetFooter tweetId={post.id} edited={post.edited}/>
+
                     </Card.Body>
+
                 </Card>
             </SwipeAction>
-            <WhiteSpace/>
+            <View style={
+                {
+                    paddingBottom: 8,
+                    backgroundColor: useThemeColor({light: 'white', dark: '#181818'}, "background"),
+                    borderColor: useThemeColor({light: 'lightgray', dark: ''}, "background"),
+                    borderWidth: 0.5
+                }
+            }>
+                <TweetFooter tweetId={post.id} edited={post.edited}/>
+
+            </View>
+
         </View>
     )
 }
