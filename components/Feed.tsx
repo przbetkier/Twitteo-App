@@ -6,7 +6,7 @@ import {HomeStackScreenProps} from "../types";
 import {Text, View} from "./Themed";
 import {FontAwesome} from "@expo/vector-icons";
 import {TweetComponent} from "./TweetComponent";
-import {getWidth} from "../utils/screen";
+import {getPageSidePadding, getWidth} from "../utils/screen";
 
 export interface Tweet {
     id: string;
@@ -87,7 +87,10 @@ export default function Feed({navigation}: HomeStackScreenProps<'Feed'>) {
                         justifyContent: "center",
                         paddingTop: 12,
                         paddingBottom: 12,
+                        paddingLeft: getPageSidePadding(),
+                        paddingRight: getPageSidePadding(),
                         maxWidth: 1200,
+                        width: getWidth()
                     }
                 }>
                     <Button

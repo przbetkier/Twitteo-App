@@ -120,7 +120,7 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
                     <Text style={{color: "white"}}>Edit</Text>
                 </View>
             );
-        } else return (<View></View>)
+        }
     };
 
     const handleEditionSubmitted = (txt: string) => {
