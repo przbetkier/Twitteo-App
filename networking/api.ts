@@ -6,8 +6,8 @@ import {Platform} from "react-native";
 import {toExtension} from "../utils/mime";
 import {getBlobFromUri} from "../utils/blob";
 
-// const API_URL = "http://167.99.129.28:8080"
-export const API_URL = "http://127.0.0.1:8080"
+export const API_URL = "http://167.99.129.28:8080"
+// export const API_URL = "http://127.0.0.1:8080"
 
 export const getUser = async (): Promise<any> => {
     const user = await AsyncStorage.getItem('user')

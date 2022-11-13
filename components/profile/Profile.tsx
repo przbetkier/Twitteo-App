@@ -4,6 +4,7 @@ import {gerUserProfileByDisplayName} from "../../networking/api";
 import {View} from "../Themed";
 import {ActivityIndicator} from "@ant-design/react-native";
 import ProfileTweets from "./ProfileTweets";
+import {getPageSidePadding, getWidth} from "../../utils/screen";
 
 export interface UserResponse {
     userId: string,
@@ -45,7 +46,10 @@ export default function Profile({navigation, route}: HomeStackScreenProps<'Profi
                             justifyContent: "center",
                             paddingTop: 12,
                             paddingBottom: 12,
+                            paddingLeft: getPageSidePadding(),
+                            paddingRight: getPageSidePadding(),
                             maxWidth: 1200,
+                            width: getWidth()
                         }
                     }>
                         {user && (
