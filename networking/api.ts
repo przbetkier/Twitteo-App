@@ -32,14 +32,24 @@ export const getFeed = async (page: number): Promise<TweetPageResponse> => {
     return await response.json() as TweetPageResponse
 }
 
+export const getReplies = async (tweetId: string): Promise<TweetPageResponse> => {
+    const response = await fetch(`${API_URL}/tweets/${tweetId}/replies`)
+    return await response.json() as TweetPageResponse
+}
+
 export const getUserPosts = async (userId: string, page: number): Promise<Tweet[]> => {
-    const response = await fetch(`${API_URL}/tweets/${userId}?page=${page}&size=15`)
+    const response = await fetch(`${API_URL}/tweets?userId=${userId}&page=${page}&size=15`)
     return await response.json() as Tweet[]
 }
 
 export const getHashtagPosts = async (name: string, page: number): Promise<Tweet[]> => {
     const response = await fetch(`${API_URL}/tags/${name}/tweets?page=${page}&size=15`)
     return await response.json() as Tweet[]
+}
+
+export const getTweetById = async (tweetId: string): Promise<Tweet> => {
+    const response = await fetch(`${API_URL}/tweets/${tweetId}`, { method: "GET" })
+    return await response.json() as Tweet
 }
 
 export const gerUserProfile = async (userId: string): Promise<UserResponse> => {
@@ -61,6 +71,20 @@ export const postTweet = async (content: string, attachments: number[]): Promise
     const token = await user.stsTokenManager.accessToken
     // FIXME: Not nullable userId on backend but it's obsolete and not used
     const response = await fetch(`${API_URL}/tweets`, {
+        headers: {
+            ...headers(token).headers,
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({content: content, attachments: attachments}),
+    })
+    return response.json()
+}
+
+export const postReply = async (content: string, attachments: number[], tweetId: string): Promise<Tweet> => {
+    const user = await getUser()
+    const token = await user.stsTokenManager.accessToken
+    const response = await fetch(`${API_URL}/tweets/${tweetId}/replies`, {
         headers: {
             ...headers(token).headers,
             'Content-Type': 'application/json'
@@ -274,6 +298,7 @@ export enum TweetLikeState {
 export interface TweetLikeStateResponse {
     state: TweetLikeState;
     likes: number;
+    replies: number;
 }
 
 export interface BasicUserResponse {
@@ -303,5 +328,4 @@ export enum FollowerState {
     FOLLOWS = "FOLLOWS",
     DOES_NOT_FOLLOW = "DOES_NOT_FOLLOW",
     CANNOT_FOLLOW = "CANNOT_FOLLOW"
-
 }

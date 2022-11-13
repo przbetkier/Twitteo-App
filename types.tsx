@@ -33,7 +33,8 @@ export type HomeParamList = {
   Feed: undefined;
   Profiles: { displayName: string };
   Hashtag: { name: string };
-  AddTweet: undefined;
+  AddTweet: { replyTo: string | null };
+  Tweet: { tweetId: string };
   Followers: { userId: string }
   Followees: { userId: string }
 }

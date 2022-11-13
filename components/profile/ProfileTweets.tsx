@@ -5,7 +5,7 @@ import {FlatList, RefreshControl, View} from "react-native";
 import {TweetComponent} from "../TweetComponent";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {Text} from "../Themed";
-import {ActivityIndicator, Flex} from "@ant-design/react-native";
+import {ActivityIndicator, Flex, WhiteSpace} from "@ant-design/react-native";
 import {UserResponse} from "./Profile";
 import {Bio} from "./Bio";
 import {getWidth} from "../../utils/screen";
@@ -70,6 +70,9 @@ export default function ProfileTweets({user, navigation}: ProfileTweetsProps) {
                     ListHeaderComponent={
                         <Bio user={user}/>
                     }
+                    ItemSeparatorComponent={() =>
+                        <WhiteSpace size={"xl"}/>
+                    }
                     ListEmptyComponent={
                         <View style={{height: "100%"}}>
                             <Flex direction={"column"} justify={"center"} align={"center"}
@@ -79,7 +82,8 @@ export default function ProfileTweets({user, navigation}: ProfileTweetsProps) {
                                     <Text style={{marginTop: 16, textAlign: "center"}}>Oooops! It looks like this
                                         user hasn't added any posts
                                         yet.</Text>
-                                    <Text style={{marginTop: 16, textAlign: "center"}}>Nothing is lost! Follow him to see new posts as quickly as possible!</Text>
+                                    <Text style={{marginTop: 16, textAlign: "center"}}>Nothing is lost! Follow him to
+                                        see new posts as quickly as possible!</Text>
                                 </Flex>
 
                             </Flex>

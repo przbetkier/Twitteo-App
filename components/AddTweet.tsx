@@ -12,7 +12,7 @@ import {
     TextInput,
     TouchableHighlight,
 } from "react-native";
-import {API_URL, ObjectUploadResponse, postTweet, uploadImage} from "../networking/api";
+import {API_URL, ObjectUploadResponse, postReply, postTweet, uploadImage} from "../networking/api";
 import {getWidth} from "../utils/screen";
 import {FontAwesome} from "@expo/vector-icons";
 import {tintColorLight} from "../constants/Colors";
@@ -20,8 +20,8 @@ import {tintColorLight} from "../constants/Colors";
 export default function AddTweet({navigation, route}: HomeStackScreenProps<'AddTweet'>) {
 
     const [tweetContent, setTweetContent] = useState('');
-
     const [isPosting, setIsPosting] = useState(false);
+    const replyTo = route.params?.replyTo ?? null;
 
     const attachments = (): number[] => {
         if (image) {
@@ -33,8 +33,22 @@ export default function AddTweet({navigation, route}: HomeStackScreenProps<'AddT
 
     const handleTweetSubmitted = () => {
         setIsPosting(true);
+        if (replyTo) {
+            postReplyTweet()
+        } else {
+            postNewTweet()
+        }
+    }
+
+    const postNewTweet = () => {
         postTweet(tweetContent, attachments())
             .then(() => navigation.navigate('Feed'))
+            .then(() => setIsPosting(false))
+    }
+
+    const postReplyTweet = () => {
+        postReply(tweetContent, attachments(), replyTo!!)
+            .then(() => navigation.goBack())
             .then(() => setIsPosting(false))
     }
 
@@ -48,7 +62,7 @@ export default function AddTweet({navigation, route}: HomeStackScreenProps<'AddT
     const handleImagePicked = async (pickerResult: ImagePicker.ImagePickerResult) => {
         try {
             if (pickerResult.cancelled) {
-                alert("Upload cancelled");
+                console.log("Upload cancelled");
                 return;
             } else {
                 uploadAndDisplay(pickerResult.uri)
