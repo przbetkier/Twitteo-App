@@ -4,7 +4,7 @@ import {getReplies} from "../networking/api";
 import {ActivityIndicator, FlatList} from "react-native";
 import {TweetComponent} from "./TweetComponent";
 import {useNavigation} from "@react-navigation/native";
-import {Button} from "@ant-design/react-native";
+import {Button, Flex} from "@ant-design/react-native";
 import {Text, useThemeColor, View} from "./Themed";
 import {tintColorLight} from "../constants/Colors";
 
@@ -70,14 +70,15 @@ export const TweetReplies: React.FC<TweetRepliesProps> = ({tweetId, onRepliesCha
             paddingLeft: 12,
             backgroundColor: useThemeColor({light: 'white', dark: '#181818'}, "background")
         }}>
-            <Button
-                size={"small"}
-                style={{backgroundColor: tintColorLight, width: 60, alignItems: "center", borderWidth: 0}}
-                onPress={navigateToReplyModal}>
-                <Text style={{color: "white"}}>Reply</Text>
-            </Button>
+            <Flex direction={"row"} justify={"end"}>
+                <Button
+                    size={"small"}
+                    style={{backgroundColor: tintColorLight, width: 60, alignItems: "center", borderWidth: 0, marginRight: 8}}
+                    onPress={navigateToReplyModal}>
+                    <Text style={{color: "white"}}>Reply</Text>
+                </Button>
+            </Flex>
             <FlatList data={replies}
-                      style={{marginTop: 16}}
                       ItemSeparatorComponent={() =>
                           <View style={{
                               marginLeft: 20,
@@ -88,17 +89,17 @@ export const TweetReplies: React.FC<TweetRepliesProps> = ({tweetId, onRepliesCha
                           }}>
                           </View>
                       }
-                      ListEmptyComponent={
-                          <>
-                              {loading && (
-                                  <ActivityIndicator size={"small"} style={{marginTop: 8}}/>
-                              )}
+                ListEmptyComponent={
+                    <>
+                        {loading && (
+                            <ActivityIndicator size={"small"} style={{marginTop: 8}}/>
+                        )}
 
-                              {!loading && (
-                                  <Text style={{marginTop: 8}}>There are no replies for this tweet.</Text>
-                              )}
-                          </>
-                      }
+                        {!loading && (
+                            <Text style={{marginTop: 8}}>There are no replies for this tweet.</Text>
+                        )}
+                    </>
+                }
                       renderItem={({item}) => renderTweet(item)}
             />
         </View>

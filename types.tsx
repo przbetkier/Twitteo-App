@@ -25,7 +25,7 @@ export type RootTabParamList = {
   Home: NavigatorScreenParams<HomeParamList> | undefined;
   TabTwo: undefined;
   TabThree: undefined;
-  TabFour: undefined;
+  Explore: NavigatorScreenParams<ExploreParamList> | undefined;
   TabFive: undefined;
 };
 
@@ -39,6 +39,13 @@ export type HomeParamList = {
   Followees: { userId: string }
 }
 
+export type ExploreParamList = {
+  ExploreMainScreen: undefined;
+  MostLikedTweetsScreen: undefined;
+  MostDiscussedTweetsScreen: undefined;
+  MostFollowedUsersScreen: undefined;
+}
+
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
   BottomTabScreenProps<RootTabParamList, Screen>,
   NativeStackScreenProps<RootStackParamList>
@@ -46,5 +53,10 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
 
 export type HomeStackScreenProps<Screen extends keyof HomeParamList> = NativeStackScreenProps<
     HomeParamList,
+    Screen
+    >;
+
+export type ExploreStackScreenProps<Screen extends keyof ExploreParamList> = NativeStackScreenProps<
+    ExploreParamList,
     Screen
     >;

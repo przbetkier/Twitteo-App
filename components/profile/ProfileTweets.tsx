@@ -68,7 +68,10 @@ export default function ProfileTweets({user, navigation}: ProfileTweetsProps) {
                 <FlatList
                     style={{minWidth: getWidth()}}
                     ListHeaderComponent={
-                        <Bio user={user}/>
+                        <>
+                            <Bio user={user}/>
+                            <WhiteSpace size={"lg"}/>
+                        </>
                     }
                     ItemSeparatorComponent={() =>
                         <WhiteSpace size={"xl"}/>

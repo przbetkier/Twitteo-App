@@ -49,7 +49,7 @@ export default function Registration({navigation}: RootStackScreenProps<'Registr
     const toErrorDescription = (authError: string) => {
         switch (authError) {
             case "auth/email-already-in-use":
-                return "Email already exists"
+                return "Email already used by another user"
             case "auth/invalid-email":
                 return "Invalid email format"
             default:
