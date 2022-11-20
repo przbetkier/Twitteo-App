@@ -2,7 +2,7 @@
   "expo": {
     "name": "Twitteo",
     "slug": "Twitteo",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "plugins": [
@@ -21,6 +21,7 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
+      "url": "https://u.expo.dev/26e8d7fc-54b6-4221-98fa-40a32b5e4a4b",
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
@@ -29,6 +30,9 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "twitteo"
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     },
     "android": {
       "adaptiveIcon": {

@@ -1,6 +1,6 @@
 {
   "name": "twitteo",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "scripts": {
     "start": "expo start --dev-client",
     "android": "expo run:android",
@@ -9,6 +9,7 @@
     "eject": "expo eject",
     "test": "jest --watchAll",
     "build-web": "expo build:web",
+    "prebuild-ios": "npx expo prebuild --platform ios",
     "deploy-ios": "eas build --profile preview --platform ios"
   },
   "jest": {
