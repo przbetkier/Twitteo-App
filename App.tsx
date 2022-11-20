@@ -10,10 +10,12 @@ import {auth} from "./config/FirebaseConfig";
 import {User} from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useState} from "react";
+import {QueryClient, QueryClientProvider} from "react-query";
 
 export default function App() {
     const isLoadingComplete = useCachedResources();
     const colorScheme = useColorScheme();
+    const queryClient = new QueryClient()
 
     const [user, setUser] = useState<User | null>(null);
 
@@ -45,8 +47,10 @@ export default function App() {
         return (
             <SafeAreaProvider>
                 <Provider>
-                    <Navigation colorScheme={colorScheme} user={user}/>
-                    <StatusBar/>
+                    <QueryClientProvider client={queryClient}>
+                        <Navigation colorScheme={colorScheme} user={user}/>
+                        <StatusBar/>
+                    </QueryClientProvider>
                 </Provider>
             </SafeAreaProvider>
         );

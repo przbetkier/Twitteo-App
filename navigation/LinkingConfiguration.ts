@@ -36,9 +36,12 @@ const linking: LinkingOptions<RootStackParamList> = {
               TabTwoScreen: 'three',
             },
           },
-          TabFour: {
+          Explore: {
             screens: {
-              TabTwoScreen: 'four',
+              ExploreMainScreen: 'explore',
+              MostLikedTweetsScreen: 'most-liked-tweets',
+              MostDiscussedTweetsScreen: 'most-discussed-tweets',
+              MostFollowedUsersScreen: 'most-followed-users'
             },
           },
           TabFive: {

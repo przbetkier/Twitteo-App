@@ -13,12 +13,15 @@ import Home from '../screens/Home';
 import SearchScreen from '../screens/SearchScreen';
 import {RootStackParamList, RootTabParamList, RootTabScreenProps} from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
-import LoginScreen from "../screens/LoginScreen";
+// import LoginScreen from "../screens/LoginScreen";
 import {auth} from "../config/FirebaseConfig";
 import {User} from "firebase/auth";
 import Registration from "../screens/Registration";
 import {getUser} from "../networking/api";
 import {MaterialCommunityIcons} from '@expo/vector-icons';
+import {ExploreScreen} from "../screens/ExploreScreen";
+import {LoginScreen} from "../screens/LoginScreen";
+import {ProfileEditScreen} from "../screens/ProfileEditScreen";
 
 export default function Navigation({colorScheme, user}: { colorScheme: ColorSchemeName, user: any }) {
 
@@ -45,7 +48,6 @@ function RootNavigator() {
         <Stack.Navigator>
             <Stack.Screen name="Root" component={BottomTabNavigator} options={{headerShown: false}}/>
             <Stack.Screen name="NotFound" component={NotFoundScreen} options={{title: 'Oops!'}}/>
-            <Stack.Screen name="Login" component={LoginScreen} options={{title: 'Login to Twitteo!'}}/>
             <Stack.Screen name="Registration" component={Registration} options={{title: 'Registration'}}/>
             <Stack.Group screenOptions={{presentation: 'modal'}}>
                 <Stack.Screen name="Modal" component={ModalScreen}/>
@@ -71,72 +73,73 @@ function BottomTabNavigator() {
         )
     }, [])
 
-
     return (
         <>
-            <BottomTab.Navigator
-                initialRouteName="Home"
-                screenOptions={{
-                    headerShown: false,
-                    tabBarActiveTintColor: Colors[colorScheme].tint,
-                }}>
-                <BottomTab.Screen
-                    name="Home"
-                    component={Home}
-                    options={({navigation}: RootTabScreenProps<'Home'>) => ({
-                        title: 'Home',
-                        tabBarIcon: ({color}) => <TabBarIcon name="home" color={color}/>
-                        // FIXME: To be removed or only displayed on Desktop
-                        // <LoginHeader user={user} navigation={navigation}/>
+            {user ? (
+                <BottomTab.Navigator
+                    initialRouteName="Home"
+                    screenOptions={{
+                        headerShown: false,
+                        tabBarActiveTintColor: Colors[colorScheme].tint,
+                    }}>
+                    <BottomTab.Screen
+                        name="Home"
+                        component={Home}
+                        options={({navigation}: RootTabScreenProps<'Home'>) => ({
+                            title: 'Home',
+                            tabBarIcon: ({color}) => <TabBarIcon name="home" color={color}/>
 
-                    })}
-                />
-                <BottomTab.Screen
-                    name="TabTwo"
-                    component={SearchScreen}
-                    options={{
-                        headerShown: true,
-                        title: 'Search',
-                        tabBarIcon: ({color}) => <TabBarIcon name="search" color={color}/>,
-                    }}
-                />
-                <BottomTab.Screen
-                    name="TabThree"
-                    component={SearchScreen}
-                    options={{
-                        title: 'Notifications',
-                        tabBarIcon: ({color}) => <TabBarIcon name="bell" color={color}/>,
-                    }}
-                />
-                <BottomTab.Screen
-                    name="TabFour"
-                    component={SearchScreen}
-                    options={{
-                        title: 'Explore',
-                        tabBarIcon: ({color}) => (
-                            <MaterialCommunityIcons
-                                name="telescope" size={30}
-                                style={{marginBottom: -3}} color={color}
-                            />
-                        ),
-                    }}
-                />
-                <BottomTab.Screen
-                    name="TabFive"
-                    component={LoginScreen}
-                    options={{
-                        headerShown: true,
-                        title: user ? 'Profile' : 'Login',
-                        tabBarIcon: ({color}) => (
-                            <>
-                                {!user && <TabBarIcon name="twitter" color={color}/>}
-                                {user && <TabBarIcon name="user-circle" color={color}/>}
-                            </>
+                        })}
+                    />
+                    <BottomTab.Screen
+                        name="TabTwo"
+                        component={SearchScreen}
+                        options={{
+                            headerShown: true,
+                            title: 'Search',
+                            tabBarIcon: ({color}) => <TabBarIcon name="search" color={color}/>,
+                        }}
+                    />
+                    <BottomTab.Screen
+                        name="TabThree"
+                        component={SearchScreen}
+                        options={{
+                            title: 'Notifications',
+                            tabBarIcon: ({color}) => <TabBarIcon name="bell" color={color}/>,
+                        }}
+                    />
+                    <BottomTab.Screen
+                        name="Explore"
+                        component={ExploreScreen}
+                        options={{
+                            title: 'Explore',
+                            tabBarIcon: ({color}) => (
+                                <MaterialCommunityIcons
+                                    name="telescope" size={30}
+                                    style={{marginBottom: -3}} color={color}
+                                />
+                            ),
+                        }}
+                    />
+                    <BottomTab.Screen
+                        name="TabFive"
+                        component={ProfileEditScreen}
+                        options={{
+                            headerShown: true,
+                            title: 'Profile',
+                            tabBarIcon: ({color}) => (
+                                <>
+                                    {!user && <TabBarIcon name="twitter" color={color}/>}
+                                    {user && <TabBarIcon name="user-circle" color={color}/>}
+                                </>
 
-                        ),
-                    }}
-                />
-            </BottomTab.Navigator>
+                            ),
+                        }}
+                    />
+                </BottomTab.Navigator>
+
+            ) : <LoginScreen/>
+            }
         </>
     );
 }

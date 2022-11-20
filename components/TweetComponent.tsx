@@ -38,6 +38,9 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
     const [post, setPost] = useState(tweet)
     const [loading, setLoading] = useState(false)
 
+    const borderColorCard = useThemeColor({light: 'lightgray', dark: 'black'}, "background")
+    const borderColorCardBody = useThemeColor({light: 'lightgray', dark: 'darkgray'}, "background")
+
     useEffect(() => {
         getUser().then((user) => {
             setCurrentUserId(user.uid);
@@ -69,7 +72,10 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
             .catch(err => console.error('Error', err));
     }
 
-    const handleDelete = (progressAnimatedValue: Animated.AnimatedInterpolation, dragAnimatedValue: Animated.AnimatedInterpolation) => {
+    const handleDelete = (
+        progressAnimatedValue: Animated.AnimatedInterpolation,
+        dragAnimatedValue: Animated.AnimatedInterpolation
+    ) => {
 
         if (post.userId === currentUserId && !deletionDisabled) {
             return (
@@ -171,8 +177,9 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
                         {
                             padding: 8,
                             backgroundColor: useThemeColor({light: 'white', dark: '#181818'}, "background"),
-                            borderColor: '#2c2b2b',
                             borderWidth: 0.22,
+                            borderTopWidth: 1,
+                            borderColor: borderColorCard,
                         }
                     }
                 >
@@ -191,7 +198,7 @@ export const TweetComponent: React.FC<TweetProps> = ({tweet, deletionDisabled, o
                         thumb={(post.avatarUrl !== "") ? post.avatarUrl : `https://i.pravatar.cc/150?u=${post.userId}`}
                     />
 
-                    <Card.Body>
+                    <Card.Body style={{borderColor: borderColorCardBody}}>
 
                         {loading && (<ActivityIndicator size="small"/>)}
                         <View>

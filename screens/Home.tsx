@@ -12,6 +12,9 @@ import Hashtag from "../components/hashtag/Hashtag";
 import {Followers} from "../components/profile/Followers";
 import {Followees} from "../components/profile/Followees";
 import TweetScreen from "../components/TweetScreen";
+import {FontAwesome5} from '@expo/vector-icons';
+import {tintColorLight} from "../constants/Colors";
+import {Flex} from "@ant-design/react-native";
 
 export default function Home() {
 
@@ -83,7 +86,11 @@ export default function Home() {
                     alignItems: 'center',
                     justifyContent: 'center',
                 }}>
-                    <Text>You are not logged in</Text>
+                    <Flex direction={"column"} style={{height: '50%'}} justify={"around"}>
+                        <Text style={{fontSize: 30, fontWeight: "bold"}}>Welcome to Twitteo</Text>
+                        <FontAwesome5 name="smile-beam" size={100} color={tintColorLight}/>
+                        <Text>Log in to join our community!</Text>
+                    </Flex>
                 </View>
             )
             }

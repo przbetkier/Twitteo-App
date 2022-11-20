@@ -6,8 +6,8 @@ import {Platform} from "react-native";
 import {toExtension} from "../utils/mime";
 import {getBlobFromUri} from "../utils/blob";
 
-export const API_URL = "http://167.99.129.28:8080"
-// export const API_URL = "http://127.0.0.1:8080"
+// export const API_URL = "http://167.99.129.28:8080"
+export const API_URL = "http://127.0.0.1:8080"
 
 export const getUser = async (): Promise<any> => {
     const user = await AsyncStorage.getItem('user')
@@ -63,6 +63,9 @@ export const gerUserProfileByDisplayName = async (displayName: string): Promise<
     const user = await getUser()
     const token = await user.stsTokenManager.accessToken
     const response = await fetch(`${API_URL}/users/?displayName=${displayName}`, headers(token))
+    if(response.status === 404) {
+        throw new Error("USER_NOT_FOUND")
+    }
     return await response.json() as UserResponse
 }
 

@@ -3,7 +3,7 @@ import {Text} from "./Themed";
 import {FontAwesome, MaterialCommunityIcons, MaterialIcons} from "@expo/vector-icons";
 import {tintColorLight} from "../constants/Colors";
 import {getTweetLikeState, likeTweet, TweetLikeState, TweetLikeStateResponse} from "../networking/api";
-import {ActivityIndicator, View} from "react-native";
+import {ActivityIndicator, TouchableOpacity, View} from "react-native";
 import {Flex} from "@ant-design/react-native";
 import {TweetReplies} from "./TweetReplies";
 
@@ -65,26 +65,29 @@ export const TweetFooter: React.FC<TweetFooterProps> = ({tweetId, edited}) => {
     }
 
     return (
-        <View style={{borderTopWidth: 0.5, borderColor: "lightgray"}}>
+        <View style={{borderTopWidth: 0.5, borderColor: "darkgray"}}>
             <View style={{marginTop: 8, paddingLeft: 8, justifyContent: "space-between", flexDirection: "row"}}>
                 {loading && (<ActivityIndicator/>)}
                 {!loading && (
                     <Flex justify={"start"} style={{minWidth: "50%"}}>
-                        <Flex direction={"row"} style={{paddingRight: 16}}>
-                            <FontAwesome name={iconName()}
-                                         size={16}
-                                         color={tintColorLight}
-                                         onPress={handleLikeIconClicked}
-                            />
-                            <Text style={{paddingLeft: 8}}>{likes}</Text>
-                        </Flex>
-                        <Flex direction={"row"}>
-                            <MaterialCommunityIcons
-                                name="message-text-outline"
-                                size={16} color={tintColorLight}
-                                onPress={toggleReplies}/>
-                            <Text style={{paddingLeft: 8}}>{replies}</Text>
-                        </Flex>
+                        <TouchableOpacity onPress={handleLikeIconClicked}>
+                            <Flex direction={"row"} style={{paddingRight: 16}}>
+                                <FontAwesome name={iconName()}
+                                             size={24}
+                                             color={"#B01E28"}
+                                />
+                                <Text style={{paddingLeft: 8}}>{likes}</Text>
+                            </Flex>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={toggleReplies}>
+                            <Flex direction={"row"}>
+                                <MaterialCommunityIcons
+                                    name="message-text-outline"
+                                    size={24} color={tintColorLight}
+                                />
+                                <Text style={{paddingLeft: 8}}>{replies}</Text>
+                            </Flex>
+                        </TouchableOpacity>
                     </Flex>
                 )
                 }
