@@ -9,7 +9,6 @@ import {tintColorLight} from "../constants/Colors";
 import {FontAwesome} from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native";
 
-// export default function LoginScreen({navigation}: RootStackScreenProps<'Login'>) {
 export const LoginScreen: React.FC = () => {
 
     const [user, setUser] = useState<User | null>()
@@ -47,7 +46,6 @@ export const LoginScreen: React.FC = () => {
             setLoading(false)
         })
     }
-
 
     auth.onAuthStateChanged((user) => {
         setUser(user);
@@ -107,6 +105,7 @@ export const LoginScreen: React.FC = () => {
                                onChangeText={setEmail}
                                style={styles.input}
                                placeholder={"e-mail"}
+                               autoCapitalize={"none"}
                                autoCorrect={false}
                                autoCompleteType={'off'}
                     />

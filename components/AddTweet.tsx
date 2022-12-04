@@ -164,7 +164,6 @@ export default function AddTweet({navigation, route}: HomeStackScreenProps<'AddT
                             placeholder="What's on your mind?"
                             autoCorrect={false}
                             placeholderTextColor={useThemeColor({light: 'gray', dark: 'gray'}, "background")}
-                            keyboardType="twitter"
                         />
                         <FontAwesome
                             name={"photo"}

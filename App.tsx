@@ -17,6 +17,8 @@ export default function App() {
     const colorScheme = useColorScheme();
     const queryClient = new QueryClient()
 
+    console.disableYellowBox = true;
+
     const [user, setUser] = useState<User | null>(null);
 
     const storeData = async (user: User | null) => {
