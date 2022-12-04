@@ -14,7 +14,7 @@
 		96905EF65AED1B983A6B3ABC /* libPods-Twitteo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-Twitteo.a */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		F19F168507CD49D5A730825B /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156ADBB34D64453EA0877F5C /* noop-file.swift */; };
+		D4123D8CF0CA41778690165E /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8165475EB3F54D04AB50A98D /* noop-file.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,13 +25,13 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Twitteo/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Twitteo/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Twitteo/main.m; sourceTree = "<group>"; };
-		156ADBB34D64453EA0877F5C /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "Twitteo/noop-file.swift"; sourceTree = "<group>"; };
+		555D02FF4C4C48C3A04AC8C4 /* Twitteo-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "Twitteo-Bridging-Header.h"; path = "Twitteo/Twitteo-Bridging-Header.h"; sourceTree = "<group>"; };
 		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-Twitteo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Twitteo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2E3173556A471DD304B334 /* Pods-Twitteo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Twitteo.debug.xcconfig"; path = "Target Support Files/Pods-Twitteo/Pods-Twitteo.debug.xcconfig"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-Twitteo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Twitteo.release.xcconfig"; path = "Target Support Files/Pods-Twitteo/Pods-Twitteo.release.xcconfig"; sourceTree = "<group>"; };
+		8165475EB3F54D04AB50A98D /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "Twitteo/noop-file.swift"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = Twitteo/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		C3988BCBA7EF47C186A28F78 /* Twitteo-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "Twitteo-Bridging-Header.h"; path = "Twitteo/Twitteo-Bridging-Header.h"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Twitteo/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -59,8 +59,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				156ADBB34D64453EA0877F5C /* noop-file.swift */,
-				C3988BCBA7EF47C186A28F78 /* Twitteo-Bridging-Header.h */,
+				8165475EB3F54D04AB50A98D /* noop-file.swift */,
+				555D02FF4C4C48C3A04AC8C4 /* Twitteo-Bridging-Header.h */,
 			);
 			name = Twitteo;
 			sourceTree = "<group>";
@@ -295,7 +295,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
-				F19F168507CD49D5A730825B /* noop-file.swift in Sources */,
+				D4123D8CF0CA41778690165E /* noop-file.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,7 +325,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = twitteo;
-				PRODUCT_NAME = Twitteo;
+				PRODUCT_NAME = "Twitteo";
 				SWIFT_OBJC_BRIDGING_HEADER = "Twitteo/Twitteo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -352,7 +352,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = twitteo;
-				PRODUCT_NAME = Twitteo;
+				PRODUCT_NAME = "Twitteo";
 				SWIFT_OBJC_BRIDGING_HEADER = "Twitteo/Twitteo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

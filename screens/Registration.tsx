@@ -8,6 +8,7 @@ import {tintColorLight} from "../constants/Colors";
 import {createUserWithEmailAndPassword, AuthError} from "firebase/auth";
 import {auth} from "../config/FirebaseConfig";
 import {signUp} from "../networking/api";
+import {MonoText} from "../components/StyledText";
 
 interface RegistrationData {
     email: string,
@@ -27,16 +28,26 @@ export default function Registration({navigation}: RootStackScreenProps<'Registr
     const [error, setError] = useState<string>("");
 
     const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
         title: {
-            fontSize: 20,
-            marginBottom: 60,
+            fontSize: 30,
+            marginBottom: 20,
             marginTop: 20,
             textAlign: "center",
             fontWeight: 'bold',
             color: tintColorLight
         },
+        subtitle: {
+            fontSize: 14,
+            marginTop: 2,
+            marginBottom: 40
+        },
         input: {
-            width: Dimensions.get("screen").width - 80,
+            width: 300,
             backgroundColor: inputBgColor,
             padding: 10,
             marginTop: 8,
@@ -99,81 +110,70 @@ export default function Registration({navigation}: RootStackScreenProps<'Registr
 
 
     return (
-        <View style={{flex: 1}}>
+        <>
+            <View style={styles.container}>
 
-            <Text style={styles.title}>Join to Twitteo</Text>
-            <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-evenly"}}>
-                <Text>
-                    <FontAwesome
-                        name={"envelope"}
-                        color={tintColorLight}
+                <>
+                    <Text style={styles.title}>Twitteo</Text>
+                    <Text style={styles.subtitle}>Join us to start posting!</Text>
+                </>
+                <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
+
+                    <TextInput value={credentials.email}
+                               onChangeText={(text) => {
+                                   setCredentials({...credentials, email: text})
+                               }}
+                               style={styles.input}
+                               placeholder={"e-mail"}
+                               autoCapitalize={"none"}
+                               autoCorrect={false}
+                               autoCompleteType={'off'}
+                    />
+                </View>
+                <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
+                    <TextInput value={credentials.username}
+                               onChangeText={(text) => {
+                                   setCredentials({...credentials, username: text})
+                               }}
+                               style={styles.input}
+                               placeholder={"username"}
+                               autoCapitalize={"none"}
+                               autoCorrect={false}
+                               autoCompleteType={'off'}
+                    />
+                </View>
+                <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
+                    <TextInput value={credentials.password}
+                               onChangeText={(text) => {
+                                   setCredentials({...credentials, password: text})
+                               }}
+                               style={styles.input}
+                               placeholder={"password"}
+                               autoCorrect={false}
+                               autoCompleteType={"off"}
+                               autoCapitalize={"none"}
+                               secureTextEntry={true}
+                    />
+                </View>
+                <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 20}}>
+                    <Button
+                        type={"primary"}
+                        style={{width: 300, marginTop: 12}}
+                        onPress={handleSignUp}
+                        loading={submitting}
+                        disabled={!isFormValid()}
+                    ><FontAwesome
+                        name={"rocket"}
+                        color={"white"}
                         size={20}
-                    ></FontAwesome>
-                </Text>
-                <TextInput value={credentials.email}
-                           onChangeText={(text) => {
-                               setCredentials({...credentials, email: text})
-                           }}
-                           style={styles.input}
-                           placeholder={"e-mail"}
-                           autoCapitalize={"none"}
-                           autoCorrect={false}
-                           autoCompleteType={'off'}
-                />
-            </View>
-            <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-evenly"}}>
-                <FontAwesome
-                    name={"user-circle"}
-                    color={tintColorLight}
-                    size={20}
-                ></FontAwesome>
-                <TextInput value={credentials.username}
-                           onChangeText={(text) => {
-                               setCredentials({...credentials, username: text})
-                           }}
-                           style={styles.input}
-                           placeholder={"username"}
-                           autoCapitalize={"none"}
-                           autoCorrect={false}
-                           autoCompleteType={'off'}
-                />
-            </View>
-            <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-evenly"}}>
-                <FontAwesome
-                    name={"key"}
-                    color={tintColorLight}
-                    size={20}
-                ></FontAwesome>
-                <TextInput value={credentials.password}
-                           onChangeText={(text) => {
-                               setCredentials({...credentials, password: text})
-                           }}
-                           style={styles.input}
-                           placeholder={"password"}
-                           autoCorrect={false}
-                           autoCompleteType={"off"}
-                           autoCapitalize={"none"}
-                           secureTextEntry={true}
-                />
-            </View>
-            <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
-                <Button
-                    type={"primary"}
-                    style={{width: "90%", marginTop: 60}}
-                    onPress={handleSignUp}
-                    loading={submitting}
-                    disabled={!isFormValid()}
-                ><FontAwesome
-                    name={"rocket"}
-                    color={"white"}
-                    size={20}
-                ></FontAwesome> Join now!
-                </Button>
+                    ></FontAwesome> Join now!
+                    </Button>
 
+                </View>
+                <View style={{marginTop: 8}}>
+                    <Text style={{color: "red", textAlign: "center"}}>{error}</Text>
+                </View>
             </View>
-            <View style={{marginTop: 8}}>
-                <Text style={{color: "red", textAlign: "center"}}>{error}</Text>
-            </View>
-        </View>
+        </>
     )
 }
