@@ -16,12 +16,11 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/splashscreen.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "updates": {
-      "url": "https://u.expo.dev/26e8d7fc-54b6-4221-98fa-40a32b5e4a4b",
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [

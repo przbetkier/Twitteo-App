@@ -99,7 +99,7 @@ export const LoginScreen: React.FC = () => {
                 <View
                     style={styles.container}
                 >
-                    <Text style={styles.title}>Login to Twitteo</Text>
+                    <Text style={styles.title}>Login to Twitteo!</Text>
 
                     <TextInput value={email}
                                onChangeText={setEmail}

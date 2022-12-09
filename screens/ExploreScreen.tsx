@@ -4,6 +4,8 @@ import {ExploreMainScreen} from "../components/explore/ExploreMainScreen";
 import {MostLikedTweetsScreen} from "../components/explore/MostLikedTweetsScreen";
 import {MostFollowedUsersScreen} from "../components/explore/MostFollowedUsersScreen";
 import {MostDiscussedTweetsScreen} from "../components/explore/MostDiscussedTweetsScreen";
+import {LikedByPeopleYouFollowScreen} from "../components/explore/LikedByPeopleYouFollowScreen";
+import {PeopleYouMayKnowScreen} from "../components/explore/PeopleYouMayKnowScreen";
 
 export const ExploreScreen: React.FC = ({}) => {
 
@@ -45,6 +47,25 @@ export const ExploreScreen: React.FC = ({}) => {
                         title: 'Most followed users'
                     }}
                 />
+
+                {/*Recommendations*/}
+
+                <Stack.Screen
+                    name="PeopleYouMayKnowScreen"
+                    component={PeopleYouMayKnowScreen}
+                    options={{
+                        title: 'People you may know'
+                    }}
+                />
+
+                <Stack.Screen
+                    name="LikedByPeopleYouFollowScreen"
+                    component={LikedByPeopleYouFollowScreen}
+                    options={{
+                        title: 'Liked by people you follow'
+                    }}
+                />
+
             </Stack.Group>
 
         </Stack.Navigator>

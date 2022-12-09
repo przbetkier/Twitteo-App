@@ -44,6 +44,9 @@ export type ExploreParamList = {
   MostLikedTweetsScreen: undefined;
   MostDiscussedTweetsScreen: undefined;
   MostFollowedUsersScreen: undefined;
+  PeopleYouMayKnowScreen: undefined;
+  LikedByPeopleYouFollowScreen: undefined;
+
 }
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
