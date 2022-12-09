@@ -17,7 +17,7 @@ export const getUser = async (): Promise<any> => {
     return null
 }
 
-const headers = (token: string) => {
+export const headers = (token: string) => {
     return {
         headers: {
             "Authorization": `Bearer ${token}`

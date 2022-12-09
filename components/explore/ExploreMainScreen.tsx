@@ -7,6 +7,7 @@ import {ScrollView, StyleSheet, TouchableOpacity} from "react-native";
 import {getPageSidePadding, getWidth} from "../../utils/screen";
 import {useNavigation} from "@react-navigation/native";
 import {ExploreParamList} from "../../types";
+import { FontAwesome5 } from '@expo/vector-icons';
 
 
 export const ExploreMainScreen: React.FC = ({}) => {
@@ -15,6 +16,14 @@ export const ExploreMainScreen: React.FC = ({}) => {
         recommendationCard: {
             padding: 8,
             backgroundColor: useThemeColor({light: 'white', dark: '#181818'}, "background"),
+            borderColor: '#2c2b2b',
+            borderWidth: 0.22,
+            marginBottom: 12
+        },
+        comingSoonCard: {
+            padding: 8,
+            backgroundColor: useThemeColor({light: 'white', dark: '#181818'}, "background"),
+            opacity: 0.35,
             borderColor: '#2c2b2b',
             borderWidth: 0.22,
             marginBottom: 12
@@ -129,44 +138,60 @@ export const ExploreMainScreen: React.FC = ({}) => {
                         <MaterialIcons name="local-fire-department" size={24} color="#e25822"/>
                         <Text style={{marginLeft: 8, fontWeight: "bold", fontSize: 18}}>Recommendations for you</Text>
                     </Flex>
-                    <Card style={styles.recommendationCard}>
-                        <Card.Header
-                            style={{marginLeft: 8}}
-                            title={
-                                <Text style={{paddingLeft: 8}}>People you may know</Text>
-                            }
-                            thumb={
-                                <MaterialIcons name="emoji-people" size={24} color={tintColorLight}/>
-                            }
-                        >
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigateToScreen("PeopleYouMayKnowScreen")
+                        }}>
+                        <Card style={styles.recommendationCard}>
+                            <Card.Header
+                                style={{marginLeft: 8}}
+                                title={
+                                    <Text style={{paddingLeft: 8}}>People you may know</Text>
+                                }
+                                thumb={
+                                    <MaterialIcons name="emoji-people" size={24} color={tintColorLight}/>
+                                }
+                            >
 
-                        </Card.Header>
-                        <Card.Body>
-                            <Text style={{fontStyle: "italic"}}>Explore users followed by your friends - who knows,
-                                maybe you will find someone
-                                interesting to follow? </Text>
-                        </Card.Body>
-                    </Card>
-                    <Card style={styles.recommendationCard}>
-                        <Card.Header
-                            style={{marginLeft: 8}}
-                            title={
-                                <Text style={{paddingLeft: 8}}>Liked by people you follow</Text>
-                            }
-                            thumb={
-                                <FontAwesome name={"heart-o"} size={24} color={tintColorLight}/>
-                            }
-                        >
+                            </Card.Header>
+                            <Card.Body>
+                                <Text style={{fontStyle: "italic"}}>Explore users followed by your friends - who knows,
+                                    maybe you will find someone
+                                    interesting to follow? </Text>
+                            </Card.Body>
+                        </Card>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigateToScreen("LikedByPeopleYouFollowScreen")
+                        }}>
+                        <Card style={styles.recommendationCard}>
+                            <Card.Header
+                                style={{marginLeft: 8}}
+                                title={
+                                    <Text style={{paddingLeft: 8}}>Liked by people you follow</Text>
+                                }
+                                thumb={
+                                    <FontAwesome name={"heart-o"} size={24} color={tintColorLight}/>
+                                }
+                            >
 
-                        </Card.Header>
-                        <Card.Body>
-                            <Text style={{fontStyle: "italic"}}>Explore tweets that received the most love from your
-                                friends - probably there was a
-                                reason
-                                for it!</Text>
-                        </Card.Body>
-                    </Card>
-                    <Card style={styles.recommendationCard}>
+                            </Card.Header>
+                            <Card.Body>
+                                <Text style={{fontStyle: "italic"}}>Explore tweets that received the most love from your
+                                    friends - probably there was a
+                                    reason
+                                    for it!</Text>
+                            </Card.Body>
+                        </Card>
+                    </TouchableOpacity>
+
+                    <Flex justify={"center"} direction={"row"} style={{marginBottom: 8}}>
+                        <FontAwesome5 name="user-astronaut" size={24} color={tintColorLight} />
+                        <Text style={{marginLeft: 8, fontWeight: "bold", fontSize: 18}}>Coming soon...</Text>
+                    </Flex>
+
+                    <Card style={styles.comingSoonCard}>
                         <Card.Header
                             style={{marginLeft: 8}}
                             title={

@@ -188,12 +188,12 @@ const styles = StyleSheet.create({
     separator: {
         marginVertical: 30,
         height: 1,
-        width: '80%',
+        width: '100%',
     },
     searchbar: {
         marginRight: 5,
         borderColor: 'gray',
-        borderWidth: 1,
+        borderWidth: 0.5,
         padding: 10,
         borderRadius: 10,
         width: '100%',

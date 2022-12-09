@@ -1,4 +1,4 @@
-import {FontAwesome} from '@expo/vector-icons';
+import {FontAwesome, FontAwesome5, MaterialCommunityIcons} from '@expo/vector-icons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {DarkTheme, DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -18,7 +18,6 @@ import {auth} from "../config/FirebaseConfig";
 import {User} from "firebase/auth";
 import Registration from "../screens/Registration";
 import {getUser} from "../networking/api";
-import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {ExploreScreen} from "../screens/ExploreScreen";
 import {LoginScreen} from "../screens/LoginScreen";
 import {ProfileEditScreen} from "../screens/ProfileEditScreen";
@@ -87,7 +86,12 @@ function BottomTabNavigator() {
                         component={Home}
                         options={({navigation}: RootTabScreenProps<'Home'>) => ({
                             title: 'Home',
-                            tabBarIcon: ({color}) => <TabBarIcon name="home" color={color}/>
+                            tabBarIcon: ({color}) => (
+                                <MaterialCommunityIcons
+                                    name="space-station" size={30}
+                                    style={{marginBottom: -3}} color={color}
+                                />
+                            )
 
                         })}
                     />
@@ -98,14 +102,6 @@ function BottomTabNavigator() {
                             headerShown: true,
                             title: 'Search',
                             tabBarIcon: ({color}) => <TabBarIcon name="search" color={color}/>,
-                        }}
-                    />
-                    <BottomTab.Screen
-                        name="TabThree"
-                        component={SearchScreen}
-                        options={{
-                            title: 'Notifications',
-                            tabBarIcon: ({color}) => <TabBarIcon name="bell" color={color}/>,
                         }}
                     />
                     <BottomTab.Screen
@@ -128,10 +124,11 @@ function BottomTabNavigator() {
                             headerShown: true,
                             title: 'Profile',
                             tabBarIcon: ({color}) => (
-                                <>
-                                    {!user && <TabBarIcon name="twitter" color={color}/>}
-                                    {user && <TabBarIcon name="user-circle" color={color}/>}
-                                </>
+                                <FontAwesome5
+                                    name="user-astronaut" size={30}
+                                    style={{marginBottom: -3}} color={color}
+                                />
+
 
                             ),
                         }}
